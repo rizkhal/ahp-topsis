@@ -22,6 +22,7 @@
 @push('scripts')
   <script type="text/javascript">
     var btn = document.getElementById("generate-matrix");
+    var numbers = ["0","1","2","3","4","5","6","7","8","9","."];
 
     btn.addEventListener("click", () => {
       var tbody = '';
@@ -66,8 +67,49 @@
 
     }, false);
 
-    const checkInputMatrix = () => {
-      alert("aa");
-    }
+    const checkInputMatrix = (trig) => {
+      str = trig.value;
+      var nstr = "";
+
+      for (var i = 0; i < str.length; i++) {
+        nstr += str[i];
+      }
+
+      if (str[str.length-1] == ".") {
+        return true;
+      }
+
+      nstr = nstr === "" ? "" : parseFloat(nstr);
+      trig.value = nstr;
+
+      var i = $(trig).data('i');
+      var j = $(trig).data('j');
+
+      if(nstr !== '') {
+        var nextEl = null;
+        var increment = null;
+        $('#table-input-'+j+'-'+i).val('AUTO');
+
+        if($('#table-input-'+i+'-'+(j + 1)).length > 0){
+          j++;
+          nextEl = $('#table-input-'+i+'-'+(j));
+          increment &= j;
+        }else if($('#table-input-'+(i + 1)+'-0').length > 0){
+          i++;
+          j=0;
+          increment &= i;
+          nextEl = $('#table-input-'+(i)+'-0');
+        }
+
+        if(nextEl){
+          if(i!=j){
+            increment++;
+          }
+        }
+
+      }else{
+        $('#table-input-'+j+'-'+i).val('');
+      }
+    };
   </script>
 @endpush

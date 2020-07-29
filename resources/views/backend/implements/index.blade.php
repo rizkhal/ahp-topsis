@@ -1,5 +1,4 @@
 <x-app-layout title="Buat Perhitungan">
-
     @push('styles')
         <style type="text/css">
             textarea.form-control {
@@ -16,7 +15,7 @@
                 <h2 class="section-title">Perhitungan AHP - TOPSIS</h2>
                 <p class="section-lead">Perhitungan dibuat menggunakan metode AHP dan TOPSIS</p>
 
-                <form method="POST">
+                <form method="POST" action="{{ route('admin.calculate.store') }}">
                     @csrf
                     <div class="row">
                         <div class="col-12 col-md-12 col-lg-12">
@@ -27,6 +26,9 @@
 
                         <div class="col-12 col-md-12 col-lg-12">
                             @include("backend::implements.partials.ri")
+                        </div>
+                        <div class="col-12 col-md-12 col-lg-12">
+                            <button type="submit" class="btn btn-primary float-right">Submit</button>
                         </div>
                     </div>
                 </form>
