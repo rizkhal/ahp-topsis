@@ -1,3 +1,6 @@
+@push('scripts')
+  <script src="{{ asset('backend/js/vendor/sweetalert.min.js') }}"></script>
+@endpush
 <div class="card">
   <div class="card-header">
     <h4>Relative Interest Matrix</h4>
