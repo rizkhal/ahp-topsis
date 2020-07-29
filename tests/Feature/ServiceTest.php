@@ -120,12 +120,15 @@ class ServiceTest extends TestCase
         }
 
         $this->service->setRelativeInterestMatrix($this->matrix());
-        $this->service->setCandidates(['TF', 'KS', 'NH', 'AT']);
+        $this->service->setCandidates(['TF', 'KS', 'NH', 'AT', 'LI']);
 
         $this->service->setBatchCriteriaPairWise($this->pairWaise());
         $this->service->finalize();
 
         $result = $this->service->getResult();
+        $matrix = $this->service->getMatrix();
+
+        dd($matrix);
 
         $this->assertEquals(0.08884097602454889, $result[0]["value"]);
     }

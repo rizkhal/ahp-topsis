@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\AhpController;
+use App\Http\Controllers\CalculateController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("admin")->middleware("auth")->as("admin.")->group(function () {
-    Route::prefix("ahp")->as("ahp.")->group(function () {
-        Route::get("/", [AhpController::class, 'index'])->name("index");
+    Route::prefix("calculate")->as("calculate.")->group(function () {
+        Route::get("/", [CalculateController::class, 'calculate'])->name("calculate");
     });
 });

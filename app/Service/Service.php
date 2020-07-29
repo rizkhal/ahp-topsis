@@ -170,7 +170,7 @@ class Service extends BaseService
 
         foreach ($matrix as $i => $m) {
             if ($size != count($matrix)) {
-                throw new ServiceException("Error Processing Request", 1);
+                throw new Exception("Error Processing Request", 1);
             }
 
             for ($j = 0; $j < count($m); $j++) {
@@ -324,18 +324,18 @@ class Service extends BaseService
         $size = count($this->candidates);
 
         if ($size != count($matrix)) {
-            throw new SeriveException("Matrix size should be $size x $size");
+            throw new ServiceException("Matrix size should be $size x $size");
         }
 
         foreach ($matrix as $i => $m) {
             if ($size != count($m)) {
-                throw new SeriveException("Matrix size should be $size x $size");
+                throw new ServiceException("Matrix size should be $size x $size");
             }
 
             for ($j = 0; $j < count($m); $j++) {
                 if ($i == $j) {
                     if ($matrix[$i][$j] != 1) {
-                        throw new SeriveException("Matrix size should be $size x $size");
+                        throw new ServiceException("Matrix size should be $size x $size");
                     } else {
                         if ($matrix[$i][$j] != null) {
                             $matrix[$j][$i] = 1 / $matrix[$i][$j];

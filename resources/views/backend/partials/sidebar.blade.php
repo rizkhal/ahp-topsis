@@ -8,8 +8,14 @@
     </div>
     <ul class="sidebar-menu">
       <li class="{{active("admin/dashboard*")}}"><a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
-      <li class="{{active("admin/ahp*")}}"><a class="nav-link" href="{{ route('admin.ahp.index') }}"><i class="fas fa-fire"></i> <span>Ahp</span></a></li>
-      <li><a class="nav-link" href="#"><i class="fas fa-fire"></i> <span>Topsis</span></a></li>
+      <li class="menu-header">Perhitungan</li>
+      <li class="nav-item dropdown {{active("admin/calculate*")}}">
+        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-fire"></i> <span>Ahp - Topsis</span></a>
+        <ul class="dropdown-menu">
+          <li class="{{active("admin/calculate*")}}"><a class="nav-link" href="{{ route('admin.calculate.calculate') }}">Buat Perhitungan</a></li>
+          <li><a class="nav-link" href="#">Lihat perhitungan</a></li>
+        </ul>
+      </li>
     </ul>
 
     <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
