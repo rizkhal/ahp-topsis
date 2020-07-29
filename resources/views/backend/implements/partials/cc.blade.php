@@ -27,7 +27,7 @@
             <div id="candidate-container" class="form-group">
                 <label>Candidate</label>
                 <div class="input-group">
-                    <input type="text" name="candidate[]" class="form-control">
+                    <input type="text" name="candidate[]" class="alternative form-control">
                     <div class="input-group-append">
                         <div class="input-group-text bg-primary" id="clone-candidate">
                             <i class="fas fa-plus text-white"></i>
@@ -60,7 +60,7 @@
 
         candidate.addEventListener("click", () => {
             counter++;
-            createElement("candidate-container", "div", "candidate-"+counter, inputElements("candidate-"+counter, "candidate[]"));
+            createElement("candidate-container", "div", "candidate-"+counter, inputElements("candidate-"+counter, "candidate[]", "alternative"));
         }, false);
 
         const inputElements = (id, name, classes) => {
