@@ -1,5 +1,5 @@
 <div class="col-6 col-md-6 col-lg-6">
-    <div class="card">
+    <div class="card card-primary">
         <div class="card-header">
             <h4>Criteria</h4>
         </div>
@@ -19,7 +19,7 @@
     </div>
 </div>
 <div class="col-6 col-md-6 col-lg-6">
-    <div class="card">
+    <div class="card card-primary">
         <div class="card-header">
             <h4>Candidate</h4>
         </div>

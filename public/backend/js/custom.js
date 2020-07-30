@@ -44,7 +44,10 @@ const generateMatrix = () => {
 
         var td = '';
         tr += `<th scope="col" class="text-center">${el.value}</th>`;
+        // -------------------------> 
+        // need revision
         console.log(element.length);
+        // <------------------------
         for (var j = 0; j < element.length; j++) {
             if (element[j].value != "" && element[i].value != "") {
                 td += '<td><input type="text" name="row[' + i + '][' + j + ']" class="form-control table-input" id="table-input-' + i + '-' + j + '" data-i="' + i + '" data-j="' + j + '" value="' + (i == j ? '1' : '') + '" ' + (i == j ? 'readonly ' : 'onKeyUp="return checkInputMatrix(this);"') + 'required /></td>';
