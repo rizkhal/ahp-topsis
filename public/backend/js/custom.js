@@ -27,29 +27,36 @@ const generateMatrix = () => {
         return false;
     }
 
-    // wip is here
     element.forEach((el, i) => {
+
         if (criterias.includes(el.value)) {
             flag = true;
-            swal({
-                title: "Oops...",
-                icon: "error",
-                text: `Criteria "${el.value}" sudah ada.`,
-            });
+            if (el.value != "") {
+                swal({
+                    title: "Oops...",
+                    icon: "error",
+                    text: `Criteria "${el.value}" sudah ada.`,
+                });
+            }
         }
 
-        if (el.value !== "") {
-            criterias.push(el.value);
-            var td = '';
-            tr += `<th scope="col" class="text-center">${el.value}</th>`;
-            for (var j = 0; j < element.length; j++) {
+        criterias.push(el.value);
+
+        var td = '';
+        tr += `<th scope="col" class="text-center">${el.value}</th>`;
+        console.log(element.length);
+        for (var j = 0; j < element.length; j++) {
+            if (element[j].value != "" && element[i].value != "") {
                 td += '<td><input type="text" name="row[' + i + '][' + j + ']" class="form-control table-input" id="table-input-' + i + '-' + j + '" data-i="' + i + '" data-j="' + j + '" value="' + (i == j ? '1' : '') + '" ' + (i == j ? 'readonly ' : 'onKeyUp="return checkInputMatrix(this);"') + 'required /></td>';
             }
-            tbody += `
-              <tr>
-                <th scope="row" class="black white-text text-center">${el.value}</th>${td}
-              </tr>`;
         }
+
+        tbody += `
+          <tr>
+            <th scope="row" class="black white-text text-center">${el.value}</th>
+            ${td}
+          </tr>`;
+
     });
     if (!flag) {
         document.getElementById("table-matrix-interest-top").innerHTML = tr;
