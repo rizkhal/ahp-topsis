@@ -12,8 +12,8 @@
       <li class="nav-item dropdown {{active("admin/calculate*")}}">
         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-fire"></i> <span>Ahp - Topsis</span></a>
         <ul class="dropdown-menu">
-          <li class="{{active("admin/calculate*")}}"><a class="nav-link" href="{{ route('admin.calculate.index') }}">Buat Perhitungan</a></li>
-          <li><a class="nav-link" href="#">Lihat perhitungan</a></li>
+          <li class="{{active("admin/calculate")}}"><a class="nav-link" href="{{ route('admin.calculate.index') }}">Lihat perhitungan</a></li>
+          <li class="{{active("admin/calculate/create")}}"><a class="nav-link" href="{{ route('admin.calculate.create') }}">Buat Perhitungan</a></li>
         </ul>
       </li>
     </ul>

@@ -1,37 +1,31 @@
-<x-app-layout title="Buat Perhitungan">
+<x-app-layout title="Semua Data Tersimpan">
     @push('styles')
-        <style type="text/css">
-            textarea.form-control {
-                min-height: 7em!important;
-            }
-        </style>
+        <!-- DataTables -->
+        <link rel="stylesheet" href="{{ asset('backend/css/vendor/datatables/datatables-bs4.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('backend/css/vendor/datatables/datatables-select-bs4.min.css') }}">
+    @endpush
+
+    @push('scripts')
+        <!-- Datatables -->
+        <script src="{{ asset('backend/js/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('backend/js/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('backend/js/vendor/datatables/select.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
+        {{$dataTable->scripts()}}
     @endpush
 
     @section("app")
         <section class="section">
             {{-- breadcrumb --}}
-            <x-breadcrumb title="Buat Perhitungan"></x-breadcrumb>
+            <x-breadcrumb title="Dashboard"></x-breadcrumb>
             <div class="section-body">
-                <h2 class="section-title">Perhitungan AHP - TOPSIS</h2>
-                <p class="section-lead">Perhitungan dibuat menggunakan metode AHP dan TOPSIS</p>
-
-                <form method="POST" action="{{ route('admin.calculate.store') }}">
-                    @csrf
-                    <div class="row">
-                        <div class="col-12 col-md-12 col-lg-12">
-                            @include("backend::implements.partials.detail")
-                        </div>
-                        
-                        @include("backend::implements.partials.cc")
-
-                        <div class="col-12 col-md-12 col-lg-12">
-                            @include("backend::implements.partials.ri")
-                        </div>
-                        <div class="col-12 col-md-12 col-lg-12">
-                            <button type="submit" class="btn btn-primary float-right">Submit</button>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            {{$dataTable->table()}}
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </section>
     @stop

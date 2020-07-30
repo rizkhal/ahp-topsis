@@ -11,7 +11,7 @@
 <script src="{{ asset('backend/js/vendor/bootstrap.min.js') }}"></script>
 <script src="{{ asset('backend/js/vendor/jquery.nicescroll.min.js') }}"></script>
 <script src="{{ asset('backend/js/vendor/moment.min.js') }}"></script>
-<script src="{{asset('backend/js/stisla.js')}}"></script>
+<script src="{{ asset('backend/js/stisla.js') }}"></script>
 
 <!-- JS Libraies -->
 {{-- <script src="../node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
