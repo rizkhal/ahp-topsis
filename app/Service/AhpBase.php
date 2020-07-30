@@ -4,10 +4,10 @@ declare (strict_types = 1);
 
 namespace App\Service;
 
-abstract class BaseService
+abstract class AhpBase
 {
-    const QUALITATIVE  = 0;
-    const QUANTITATIVE = 1;
+    const BENEFIT = 0;
+    const COST    = 1;
 
     public static $ir = [
         0.00,

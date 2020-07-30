@@ -32,6 +32,7 @@ class CalculateRequest extends FormRequest
             'candidate'   => ['required', 'array'],
             'row'         => ['required', 'array'],
             'pairwise'    => ['required', 'array'],
+            'type'        => ['required', 'array'],
         ];
     }
 
@@ -44,6 +45,7 @@ class CalculateRequest extends FormRequest
             'candidate'   => $this->candidate,
             'row'         => $this->row,
             'pairwise'    => $this->pairwise,
+            'type'        => $this->type,
         ];
     }
 }

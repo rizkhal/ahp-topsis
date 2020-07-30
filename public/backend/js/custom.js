@@ -50,7 +50,7 @@ const generateMatrix = () => {
         // <------------------------
         for (var j = 0; j < element.length; j++) {
             if (element[j].value != "" && element[i].value != "") {
-                td += '<td><input type="text" name="row[' + i + '][' + j + ']" class="form-control table-input" id="table-input-' + i + '-' + j + '" data-i="' + i + '" data-j="' + j + '" value="' + (i == j ? '1' : '') + '" ' + (i == j ? 'readonly ' : 'onKeyUp="return checkInputMatrix(this);"') + 'required /></td>';
+                td += '<td><input style="min-width:100px!important;" type="text" name="row[' + i + '][' + j + ']" class="form-control table-input" id="table-input-' + i + '-' + j + '" data-i="' + i + '" data-j="' + j + '" value="' + (i == j ? '1' : '') + '" ' + (i == j ? 'readonly ' : 'onKeyUp="return checkInputMatrix(this);"') + 'required /></td>';
             }
         }
 
@@ -80,15 +80,22 @@ const checkInputMatrix = (trig) => {
     }
 
     nstr = nstr === "" ? "" : parseFloat(nstr);
-    trig.value = nstr;
+    trig.Value = nstr;
 
     var i = $(trig).data('i');
     var j = $(trig).data('j');
 
     if (nstr !== '') {
+
+        if (nstr == 1) {
+            $('#table-input-' + j + '-' + i).val("1");
+        } else {
+            $('#table-input-' + j + '-' + i).val(1/nstr);
+        }
+
         var nextEl = null;
         var increment = null;
-        $('#table-input-' + j + '-' + i).val('AUTO');
+        
         if ($('#table-input-' + i + '-' + (j + 1)).length > 0) {
             j++;
             nextEl = $('#table-input-' + i + '-' + (j));
@@ -126,7 +133,12 @@ const checkPairWiseMatrix = (trig, c) => {
     var j = $(trig).data('j');
     var table = $('#table-' + c + '-input-' + j + '-' + i);
     if (nstr !== '') {
-        table.val('AUTO');
+
+        if (nstr == 1) {
+            table.val("1");
+        } else {
+            table.val(1/nstr);
+        }
     } else {
         table.val('');
     }
@@ -185,24 +197,26 @@ const printQuantitativeMatrix = (criteria_name, c) => {
         tbody += `
             <tr>
                 <td>`+element+`</td>
-                <td><input type="text" name="pairwise[`+c+`][]" placeholder="Masukan Nilai" class="table-input form-control" value="" id="table-quantitative-`+c+`-`+i+`" required></td>
+                <td><input style="min-width:100px!important;" type="text" name="pairwise[`+c+`][]" placeholder="Masukan Nilai" class="table-input form-control" value="" id="table-quantitative-`+c+`-`+i+`" required></td>
             </tr>
         `;
         i++;
     });
     var html = (c+1) + `. PairWise Matrix for Criteria : <strong>`+criteria_name+`</strong>
                 <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead class="black white-text">
-                        <tr>
-                            <th>Alternative</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        `+tbody+`
-                    </tbody>
-                </table></div>`;
+                    <table class="table table-striped table-hover">
+                        <thead class="black white-text">
+                            <tr>
+                                <th>Alternative</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            `+tbody+`
+                        </tbody>
+                    </table>
+                </div>
+                `;
     $('#pairwise-body').append(html);
 };
 
@@ -218,7 +232,7 @@ const printPairWiseMatrix = (criteria_name, c) => {
         var td = '';
         
          for (let j = 0; j < size; j++) {
-             td+='<td><input type="text" name="pairwise['+c+']['+i+']['+j+']" class="form-control table-input" id="table-'+c+'-input-'+i+'-'+j+'" data-i="'+i+'" data-j="'+j+'" value="'+ (i == j ? '1' : '') +'" ' + (i == j ? 'readonly ' : 'onKeyUp="return checkPairWiseMatrix(this,'+c+');"') + 'required/></td>';
+             td+='<td><input style="min-width:100px!important;" type="text" name="pairwise['+c+']['+i+']['+j+']" class="form-control table-input" id="table-'+c+'-input-'+i+'-'+j+'" data-i="'+i+'" data-j="'+j+'" value="'+ (i == j ? '1' : '') +'" ' + (i == j ? 'readonly ' : 'onKeyUp="return checkPairWiseMatrix(this,'+c+');"') + 'required/></td>';
          }
 
          tbody+=`<tr>
