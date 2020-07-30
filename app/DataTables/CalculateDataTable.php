@@ -21,7 +21,20 @@ class CalculateDataTable extends DataTable
     {
         return datatables()
             ->eloquent($this->query)
-            ->addColumn('action', 'calculatedatatable.action');
+            ->editColumn('created_at', function($model) {
+                return $model->created_at->diffForHumans();
+            })
+            ->addColumn('action', function($model) {
+                return '
+                    <button type="button" class="btn btn-info">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                ';
+            })
+            ->rawColumns(['action']);
     }
 
     /**
@@ -44,11 +57,12 @@ class CalculateDataTable extends DataTable
     public function html()
     {
         return $this->builder()
+            ->addTableClass('table table-hover table-striped')
             ->setTableId('calculatedatatable-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
-            ->orderBy(1)
+            ->orderBy(3, 'desc')
             ->buttons(
                 Button::make('create'),
                 Button::make('export'),
@@ -66,14 +80,14 @@ class CalculateDataTable extends DataTable
     protected function getColumns()
     {
         return [
+            Column::make('id'),
+            Column::make('title'),
+            Column::make('description'),
+            Column::make('created_at'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(60)
-                ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+                ->addClass('text-center')
         ];
     }
 

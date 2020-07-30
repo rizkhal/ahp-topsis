@@ -21,7 +21,7 @@
 <div class="col-6 col-md-6 col-lg-6">
     <div class="card card-primary">
         <div class="card-header">
-            <h4>Candidate</h4>
+            <h4>Candidate / Alternative</h4>
         </div>
         <div class="card-body">
             <div id="candidate-container" class="form-group">

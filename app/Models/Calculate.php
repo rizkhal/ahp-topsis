@@ -42,7 +42,11 @@ class Calculate extends Model
         }
 
         $service->setBatchCriteriaPairWise($pairWise);
+
         $service->finalize();
+
+        dd($service->getMatrix());
+        dd($service->getResult());
 
         return self::create([
             'title'       => $data['title'],
