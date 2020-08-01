@@ -20,9 +20,6 @@ class Calculate extends Model
 
     public function calculate($data)
     {
-        $ahp = $this->ahp->setCriteria($data["criteria"], $data["type"])
-                    ->setRelativeInterestMatrix($data["row"]);
-
-        dd($ahp->getEigen());
+        dd($data);
     }
 }

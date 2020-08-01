@@ -133,7 +133,6 @@ const checkPairWiseMatrix = (trig, c) => {
     var j = $(trig).data('j');
     var table = $('#table-' + c + '-input-' + j + '-' + i);
     if (nstr !== '') {
-
         if (nstr == 1) {
             table.val("1");
         } else {

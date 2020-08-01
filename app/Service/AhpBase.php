@@ -6,8 +6,8 @@ namespace App\Service;
 
 abstract class AhpBase
 {
-    const BENEFIT = 0;
-    const COST    = 1;
+    const QUANTITATIVE = 0;
+    const QUALITATIVE  = 1;
 
     public static $ir = [
         0.00,
@@ -21,9 +21,9 @@ abstract class AhpBase
         1.45,
         1.49,
         1.51,
-        1.48,
-        1.56,
+        1.53,
         1.57,
+        1.58,
         1.59,
     ];
 
