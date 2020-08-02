@@ -19,6 +19,12 @@ class AhpTest extends TestCase
     protected function matrix(): array
     {
         return [
+            [1.00, 0.33, 5.00],
+            [3.00, 1.00, 5.00],
+            [0.20, 0.20, 1.00],
+        ];
+
+        return [
             [1.00, 3.00, 5.00, 6.00],
             [0.33, 1.00, 5.00, 5.00],
             [0.20, 0.20, 1.00, 2.00],
@@ -33,9 +39,7 @@ class AhpTest extends TestCase
     public function eigenVectorCriteria()
     {
         $ahp = $this->ahp->setMatrix($this->matrix());
-        dump($ahp->getMatrix());
-        dump($ahp->getPriority());
-        dump($ahp->getTotal());
+        dd($ahp);
 
         die;
     }
