@@ -20,6 +20,18 @@ class Calculate extends Model
 
     public function calculate($data)
     {
-        dd($data);
+        for ($i = 0; $i < count($data['criteria']); $i++) {
+            $criteria[] = [
+                'name' => $data['criteria'][$i],
+                'type' => $data['type'][$i],
+            ];
+        }
+
+        for ($i = 0; $i < count($data['pairwise']); $i++) {
+            $pairwise[$data['criteria'][$i]] = $data['pairwise'][$i];
+        }
+
+        $ahp = $this->ahp->setCriteria($criteria)->setMatrix($data['row']);
+        dd($ahp);
     }
 }

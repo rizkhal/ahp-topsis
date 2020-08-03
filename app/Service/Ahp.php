@@ -30,18 +30,32 @@ class Ahp extends AhpBase
     private $relativeMatrix = [];
 
     /**
-     * The eigen vector
+     * Criteria pairwise
+     *
+     * @var array
+     */
+    private $criteriaPairWise = [];
+
+    /**
+     * The eigen from matrix criteria
      *
      * @var array
      */
     private $eigenVector = [];
 
     /**
-     * Criteria pairwise
-     *
+     * Final of the ranks
+     * 
      * @var array
      */
-    private $criteriaPairWise = [];
+    private $finalRanks = [];
+
+    /**
+     * Final of the matrix
+     * 
+     * @var array
+     */
+    private $finalMatrix = [];
 
     /**
      * Set the criteria matrix
@@ -82,7 +96,7 @@ class Ahp extends AhpBase
             for ($j = 0; $j < count($m); $j++) {
                 if ($i == $j) {
                     if ($matrix[$i][$j] != 1) {
-                        throw new MatrixException('matrix diagonal should have value : 1');
+                        throw new MatrixException('Matrix diagonal should have value : 1');
                     }
                 }
             }
@@ -90,8 +104,13 @@ class Ahp extends AhpBase
 
         $do = $this->normalizeEigenAndMatrix($matrix);
 
-        $this->relativeMatrix = $do['matrix'];
-        $this->eigenVector    = $do['eigen'];
+        $this->eigenVector = $do['eigen'];
+
+        $this->relativeMatrix = [
+            'matrix' => $do['matrix'],
+            'eigen'  => $do['eigen'],
+            'total'  => $do['total'],
+        ];
 
         return $this;
     }
@@ -243,9 +262,18 @@ class Ahp extends AhpBase
             $eigen[$i] = $this->round($eigen[$i] /= $size);
         }
 
+        $temp = [];
+        for ($i = 0; $i < $size; $i++) {
+            $total[$i] = 0;
+            for ($j = 0; $j < $size; $j++) {
+                $total[$i] += $this->round($matrix[$j][$j], 1);
+            }
+        }
+
         return [
             "matrix" => $matrix,
             "eigen"  => $eigen,
+            "total"  => $total,
         ];
     }
 
@@ -258,21 +286,85 @@ class Ahp extends AhpBase
      */
     private function concistencyCheck(array $matrix, array $eigen): float
     {
-        $s    = count($matrix);
         $dmax = 0;
-        for ($i = 0; $i < $s; $i++) {
+        $size = count($matrix);
+        for ($i = 0; $i < $size; $i++) {
             $e = 0;
-            for ($j = 0; $j < $s; $j++) {
+            for ($j = 0; $j < $size; $j++) {
                 $e += $matrix[$j][$i];
             }
             $dmax += $e * $eigen[$i];
 
         }
-        $ci = ($dmax - $s) / ($s - 1);
+        $ci = ($dmax - $size) / ($size - 1);
 
-        $cr = $ci / $this->getIR($s);
+        $cr = $this->round($ci / $this->getIR($size), 1);
 
         return $cr;
+    }
+
+    /**
+     * Finalizing the matrix and get result
+     * 
+     * @return self
+     */
+    public function finalize(): self
+    {
+        if (count($this->criteriaPairWise) != count($this->criteria)) {
+            throw new \ErrorException('Error');
+        }
+
+        $m1    = [];
+        $ranks = [];
+        for ($i = 0; $i < count($this->alternative); $i++) {
+            $m1[$i] = [];
+            $j      = 0;
+            $r      = ['name' => $this->alternative[$i], 'value' => 0];
+            foreach ($this->criteriaPairWise as $key => $criteriaPairWise) {
+                $m1[$i][$j] = $criteriaPairWise['eigen'][$i];
+                $r['value'] += $m1[$i][$j] * $this->eigenVector[$j];
+                $j++;
+            }
+            $ranks[] = $r;
+        }
+
+        $this->finalMatrix = $m1;
+        $this->finalRanks  = $ranks;
+
+        return $this;
+    }
+
+    /**
+     * Get result matrix and ranks
+     * 
+     * @return array
+     */
+    public function getResult(): array
+    {
+        return [
+            'matrix' => $this->finalMatrix,
+            'ranks'  => $this->finalRanks
+        ];
+    }
+
+    /**
+     * Get the matrix
+     * 
+     * @return array
+     */
+    public function getMatrix(): array
+    {
+        return $this->finalMatrix;
+    }
+
+    /**
+     * Get the final ranks
+     * 
+     * @return array
+     */
+    public function getRank(): array
+    {
+        return $this->finalRanks;
     }
 
     /**
@@ -290,12 +382,12 @@ class Ahp extends AhpBase
         if (is_array($numb)) {
             $result = [];
             for ($i = 0; $i < count($numb); $i++) {
-                $result[] = \round($numb[$i], $n);
+                $result[] = round($numb[$i], $n);
             }
 
             return $result;
         }
 
-        return \round($numb, $n);
+        return round($numb, $n);
     }
 }

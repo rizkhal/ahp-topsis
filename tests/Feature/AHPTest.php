@@ -48,20 +48,17 @@ class AHPTest extends TestCase
     protected function pairWise(): array
     {
         return [
-            'Kecepatan' =>
-            [
+            'Kecepatan'  => [
                 [1.00, 0.20, 0.14],
                 [5.00, 1.00, 0.33],
                 [7.00, 3.00, 1.00],
             ],
-            'Kenyamanan' =>
-            [
+            'Kenyamanan' => [
                 [1.00, 3.00, 0.20],
                 [0.33, 1.00, 0.33],
                 [5.00, 3.00, 1.00],
             ],
-            'Kapasitas' =>
-            [
+            'Kapasitas'  => [
                 [1.00, 0.33, 0.14],
                 [3.00, 1.00, 0.20],
                 [7.00, 5.00, 1.00],
@@ -76,11 +73,11 @@ class AHPTest extends TestCase
     public function eigenVectorAndEvaluationAndPairWiseAndCount()
     {
         $ahp = $this->ahp
-                    ->setCriteria($this->criteria())
-                    ->setAlternative(['A1', 'A2', 'A3'])
-                    ->setMatrix($this->matrix())
-                    ->setBatchCriteriaPairWise($this->pairWise());
+            ->setCriteria($this->criteria())
+            ->setAlternative(['Sepeda', 'Motor', 'Mobil'])
+            ->setBatchCriteriaPairWise($this->pairwise())
+            ->setMatrix($this->matrix())->finalize();
 
-        dd($ahp);
+        dd($ahp->getRank());
     }
 }
