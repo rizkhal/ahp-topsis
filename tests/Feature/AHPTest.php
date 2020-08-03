@@ -31,7 +31,7 @@ class AHPTest extends TestCase
             ],
             [
                 "name" => "Kenyamanan",
-                "type" => 0,
+                "type" => 1,
             ],
         ];
     }
@@ -70,14 +70,60 @@ class AHPTest extends TestCase
      * @test
      * @group f-ahp
      */
-    public function eigenVectorAndEvaluationAndPairWiseAndCount()
+    public function setCriteria()
     {
-        $ahp = $this->ahp
-            ->setCriteria($this->criteria())
-            ->setAlternative(['Sepeda', 'Motor', 'Mobil'])
-            ->setBatchCriteriaPairWise($this->pairwise())
-            ->setMatrix($this->matrix())->finalize();
+        $this->assertTrue(true);
+    }
 
-        dd($ahp);
+    /**
+     * @test
+     * @group f-ahp
+     */
+    public function setAlternative()
+    {
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     * @group f-ahp
+     */
+    public function setBatchCriteriaPairWise()
+    {
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     * @group f-ahp
+     */
+    public function setMatrix()
+    {
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     * @group f-ahp
+     */
+    public function finalRanks()
+    {
+        $ahp = $this->ahp->setCriteria($this->criteria())
+                ->setAlternative(['Sepeda', 'Motor', 'Mobil'])
+                ->setBatchCriteriaPairWise($this->pairwise())
+                ->setMatrix($this->matrix())->finalize();
+
+        $ranks = $ahp->getRank();
+
+        for ($i = 0; $i < count($ranks); $i++) {
+            $this->assertContainsEquals($ranks[$i]['value'], [0.1746, 0.1865, 0.635]);
+        }
+
+        foreach ($ranks as $r) {
+            foreach ($r as $i => $v) {
+                $this->assertArrayHasKey($i, $r);
+                $this->assertArrayHasKey($i, $r);
+            }
+        }
     }
 }
