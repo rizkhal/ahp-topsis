@@ -45,14 +45,14 @@ class Ahp extends AhpBase
 
     /**
      * Final of the ranks
-     * 
+     *
      * @var array
      */
     private $finalRanks = [];
 
     /**
      * Final of the matrix
-     * 
+     *
      * @var array
      */
     private $finalMatrix = [];
@@ -124,7 +124,6 @@ class Ahp extends AhpBase
      */
     public function setBatchCriteriaPairWise(array $matrix): self
     {
-        $this->criteriaPairWise = [];
         foreach ($matrix as $i => $m) {
             $this->setCriteriaPairWise($i, $m);
         }
@@ -143,8 +142,8 @@ class Ahp extends AhpBase
     {
         $key = array_search($name, array_column($this->criteria, 'name'));
 
-        if (!is_numeric($key)) {
-            throw new MatrixException("The criteria $name was not found!", 1);
+        if (!isset($this->criteria[$key])) {
+            throw new MatrixException("The criteria $name doesnt exists!", 1);
         }
 
         if ($this->criteria[$key]['type'] == self::QUALITATIVE) {
@@ -167,13 +166,23 @@ class Ahp extends AhpBase
             throw new MatrixException("Quantitative Pairwise should have matrix sized $size * $size");
         }
 
-        // NEED REVISION +(*_*)+
-        // ----------------------------------------------->
-        $eigen = $this->normalizeEigenAndMatrix($matrix);
+        $total = 0;
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                $total += $matrix[$i][$j];
+            }
+        }
+
+        $result = [];
+        for ($i = 0; $i < $size; $i++) {
+            $result[$i] = 0;
+            for ($j = 0; $j < $size; $j++) {
+                $result[$i] = $this->round($matrix[$i][$j] / $total);
+            }
+        }
 
         $this->criteriaPairWise[$name]['matrix'] = $matrix;
-        $this->criteriaPairWise[$name]['eigen']  = $eigen['eigen'];
-        // ----------------------------------------------->
+        $this->criteriaPairWise[$name]['eigen']  = $result;
 
         return $this;
     }
@@ -305,30 +314,30 @@ class Ahp extends AhpBase
 
     /**
      * Finalizing the matrix and get result
-     * 
+     *
      * @return self
      */
     public function finalize(): self
     {
         if (count($this->criteriaPairWise) != count($this->criteria)) {
-            throw new \ErrorException('Error');
+            throw new MatrixException("The criteria not equals with pair wise matrix.");
         }
 
-        $m1    = [];
-        $ranks = [];
+        $matrix = [];
+        $ranks  = [];
         for ($i = 0; $i < count($this->alternative); $i++) {
-            $m1[$i] = [];
-            $j      = 0;
-            $r      = ['name' => $this->alternative[$i], 'value' => 0];
+            $matrix[$i] = [];
+            $j          = 0;
+            $result     = ['name' => $this->alternative[$i], 'value' => 0];
             foreach ($this->criteriaPairWise as $key => $criteriaPairWise) {
-                $m1[$i][$j] = $criteriaPairWise['eigen'][$i];
-                $r['value'] += $m1[$i][$j] * $this->eigenVector[$j];
+                $matrix[$i][$j] = $criteriaPairWise['eigen'][$i];
+                $result['value'] += $matrix[$i][$j] * $this->eigenVector[$j];
                 $j++;
             }
-            $ranks[] = $r;
+            $ranks[] = $result;
         }
 
-        $this->finalMatrix = $m1;
+        $this->finalMatrix = $matrix;
         $this->finalRanks  = $ranks;
 
         return $this;
@@ -336,20 +345,20 @@ class Ahp extends AhpBase
 
     /**
      * Get result matrix and ranks
-     * 
+     *
      * @return array
      */
     public function getResult(): array
     {
         return [
             'matrix' => $this->finalMatrix,
-            'ranks'  => $this->finalRanks
+            'ranks'  => $this->finalRanks,
         ];
     }
 
     /**
      * Get the matrix
-     * 
+     *
      * @return array
      */
     public function getMatrix(): array
@@ -359,7 +368,7 @@ class Ahp extends AhpBase
 
     /**
      * Get the final ranks
-     * 
+     *
      * @return array
      */
     public function getRank(): array

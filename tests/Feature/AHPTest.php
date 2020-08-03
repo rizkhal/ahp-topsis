@@ -31,7 +31,7 @@ class AHPTest extends TestCase
             ],
             [
                 "name" => "Kenyamanan",
-                "type" => 1,
+                "type" => 0,
             ],
         ];
     }
@@ -78,6 +78,6 @@ class AHPTest extends TestCase
             ->setBatchCriteriaPairWise($this->pairwise())
             ->setMatrix($this->matrix())->finalize();
 
-        dd($ahp->getRank());
+        dd($ahp);
     }
 }
