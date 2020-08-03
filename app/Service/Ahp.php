@@ -4,6 +4,8 @@ declare (strict_types = 1);
 
 namespace App\Service;
 
+use App\Service\Exception\MatrixException;
+
 class Ahp extends AhpBase
 {
     /**
@@ -14,71 +16,49 @@ class Ahp extends AhpBase
     private $criteria = [];
 
     /**
+     * Set alternatif of the matrix
+     *
+     * @var array
+     */
+    private $alternative = [];
+
+    /**
      * Matrix of the criteria and candidate
      *
      * @var array
      */
-    private $matrix = [];
+    private $relativeMatrix = [];
 
     /**
-     * Eigen Vector of the matrix
+     * The eigen vector
      *
      * @var array
      */
-    private $priority = [];
+    private $eigenVector = [];
 
     /**
-     * Evaluation from kali matrix
+     * Criteria pairwise
      *
      * @var array
      */
-    private $evaluation = [];
+    private $criteriaPairWise = [];
 
     /**
-     * Total of the matrix
+     * Set the criteria matrix
      *
-     * @var array
+     * @param  array $criteria
+     * @return self
      */
-    private $total = [];
-
-    /**
-     * Get array of the matrix
-     *
-     * @return array
-     */
-    public function getMatrix(): array
+    public function setCriteria(array $criteria): self
     {
-        return $this->matrix;
-    }
+        foreach ($criteria as $i => $c) {
+            $this->criteria[] = [
+                'name' => $c['name'],
+                'type' => $c['type'] == false ? self::QUANTITATIVE : self::QUALITATIVE,
+            ];
+        }
 
-    /**
-     * Get the total of the matrix
-     *
-     * @return array
-     */
-    public function getTotal(): array
-    {
-        return $this->total;
-    }
-
-    /**
-     * Get the eigen | priority
-     *
-     * @return array
-     */
-    public function getPriority(): array
-    {
-        return $this->priority;
-    }
-
-    /**
-     * Get the evaluation from kali matrix
-     *
-     * @return array
-     */
-    public function getEvaluation(): array
-    {
-        return $this->evaluation;
+        return $this;
     }
 
     /**
@@ -89,11 +69,154 @@ class Ahp extends AhpBase
      */
     public function setMatrix(array $matrix): self
     {
-        $temp  = [];
-        $eigen = [];
-        $bobot = [];
-        $size  = count($matrix);
-        $eval  = $matrix;
+        $size = count($this->criteria);
+        if ($size != count($matrix)) {
+            throw new MatrixException("Matrix size should be $size * $size");
+        }
+
+        foreach ($matrix as $i => $m) {
+            if ($size != count($m)) {
+                throw new MatrixException("Matrix size should be $size * $size");
+            }
+
+            for ($j = 0; $j < count($m); $j++) {
+                if ($i == $j) {
+                    if ($matrix[$i][$j] != 1) {
+                        throw new MatrixException('matrix diagonal should have value : 1');
+                    }
+                }
+            }
+        }
+
+        $do = $this->normalizeEigenAndMatrix($matrix);
+
+        $this->relativeMatrix = $do['matrix'];
+        $this->eigenVector    = $do['eigen'];
+
+        return $this;
+    }
+
+    /**
+     * Set batch of the pair wise
+     *
+     * @param  string $name
+     * @param  array  $matrix
+     * @return self
+     */
+    public function setBatchCriteriaPairWise(array $matrix): self
+    {
+        $this->criteriaPairWise = [];
+        foreach ($matrix as $i => $m) {
+            $this->setCriteriaPairWise($i, $m);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the pair wise
+     *
+     * @param  string $name
+     * @param  array  $matrix
+     * @return object
+     */
+    public function setCriteriaPairWise(string $name, array $matrix): object
+    {
+        $key = array_search($name, array_column($this->criteria, 'name'));
+
+        if (!is_numeric($key)) {
+            throw new MatrixException("The criteria $name was not found!", 1);
+        }
+
+        if ($this->criteria[$key]['type'] == self::QUALITATIVE) {
+            return $this->setQualitative($name, $matrix);
+        }
+
+        return $this->setQuantitative($name, $matrix);
+    }
+
+    /**
+     * Set quantitative
+     *
+     * @param  string $name
+     * @param  array  $matrix
+     * @return self
+     */
+    private function setQuantitative(string $name, array $matrix): self
+    {
+        if (count($matrix) != $size = count($this->alternative)) {
+            throw new MatrixException("Quantitative Pairwise should have matrix sized $size * $size");
+        }
+
+        // NEED REVISION +(*_*)+
+        // ----------------------------------------------->
+        $eigen = $this->normalizeEigenAndMatrix($matrix);
+
+        $this->criteriaPairWise[$name]['matrix'] = $matrix;
+        $this->criteriaPairWise[$name]['eigen']  = $eigen['eigen'];
+        // ----------------------------------------------->
+
+        return $this;
+    }
+
+    /**
+     * Set the qualitative type
+     *
+     * @param string $name
+     * @param array  $matrix
+     * @return self
+     */
+    private function setQualitative(string $name, array $matrix): self
+    {
+        $size = count($this->alternative);
+
+        if ($size != count($matrix)) {
+            throw new MatrixException('matrix size should be ' . $size . "x" . $size);
+        }
+
+        foreach ($matrix as $i => $m) {
+            if ($size != count($m)) {
+                throw new MatrixException('matrix size should be ' . $size . "x" . $size);
+            }
+
+            for ($j = 0; $j < count($m); $j++) {
+                if ($i == $j) {
+                    if ($matrix[$i][$j] != 1) {
+                        throw new MatrixException('matrix diagonal should have value : 1');
+                    }
+                }
+            }
+        }
+
+        $this->criteriaPairWise[$name]       = $this->normalizeEigenAndMatrix($matrix);
+        $this->criteriaPairWise[$name]['cr'] = $this->concistencyCheck($matrix, $this->criteriaPairWise[$name]['eigen']);
+
+        return $this;
+    }
+
+    /**
+     * Set the alternative
+     *
+     * @param  array $alternative
+     * @return self
+     */
+    public function setAlternative(array $alternative): self
+    {
+        $this->alternative = $alternative;
+
+        return $this;
+    }
+
+    /**
+     * Normalize matrix
+     *
+     * @param  array $matrix
+     * @return array
+     */
+    private function normalizeEigenAndMatrix(array $matrix): array
+    {
+        $temp = [];
+        $size = count($matrix);
 
         // temp perkalian matrix
         for ($i = 0; $i < $size; $i++) {
@@ -107,38 +230,49 @@ class Ahp extends AhpBase
         }
 
         // hitung eigen | prioritas
+        $eigen = [];
         for ($i = 0; $i < $size; $i++) {
             $eigen[$i] = 0;
             for ($j = 0; $j < $size; $j++) {
                 $matrix[$i][$j] /= $temp[$j];
                 $eigen[$i] += $matrix[$i][$j];
 
-                $this->matrix[$i][$j] = $this->round($matrix[$i][$j]);
+                $matrix[$i][$j] = $this->round($matrix[$i][$j]);
             }
 
-            $this->priority[] = $this->round($eigen[$i] /= $size);
+            $eigen[$i] = $this->round($eigen[$i] /= $size);
         }
 
-        // set null temp
-        // perkalian matrix dengan eigen vector
-        // untuk cari bobot evaluasi dari matrix
-        $temp = [];
-        for ($i = 0; $i < $size; $i++) {
-            $bobot[$i] = 0;
-            for ($j = 0; $j < $size; $j++) {
-                $temp[$i][$j] = $eval[$i][$j] * $this->priority[$j];
-                $bobot[$i] += $temp[$i][$j];
+        return [
+            "matrix" => $matrix,
+            "eigen"  => $eigen,
+        ];
+    }
+
+    /**
+     * Check the consistency
+     *
+     * @param  array  $matrix
+     * @param  array  $eigen
+     * @return float
+     */
+    private function concistencyCheck(array $matrix, array $eigen): float
+    {
+        $s    = count($matrix);
+        $dmax = 0;
+        for ($i = 0; $i < $s; $i++) {
+            $e = 0;
+            for ($j = 0; $j < $s; $j++) {
+                $e += $matrix[$j][$i];
             }
+            $dmax += $e * $eigen[$i];
 
-            $this->evaluation[] = $this->round($bobot[$i]);
         }
+        $ci = ($dmax - $s) / ($s - 1);
 
-        // hitung total dari hasil kali matrix
-        for ($j = 0; $j < $size; $j++) {
-            $this->total[] = $this->round(array_sum($this->matrix[$j]));
-        }
+        $cr = $ci / $this->getIR($s);
 
-        return $this;
+        return $cr;
     }
 
     /**
@@ -150,7 +284,7 @@ class Ahp extends AhpBase
     private function round($numb, int $n = 2)
     {
         if (is_string($numb)) {
-            throw new Exception("Can'nt round type data string.", 1);
+            throw new MatrixException("Can'nt round type data string.", 1);
         }
 
         if (is_array($numb)) {
