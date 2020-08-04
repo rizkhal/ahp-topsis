@@ -7,7 +7,7 @@ namespace Tests\Feature;
 use App\Service\Ahp;
 use Tests\TestCase;
 
-class AHPTest extends TestCase
+class AhpTest extends TestCase
 {
     protected $ahp;
 

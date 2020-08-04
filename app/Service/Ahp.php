@@ -246,7 +246,7 @@ class Ahp extends AhpBase
         $temp = [];
         $size = count($matrix);
 
-        // temp perkalian matrix
+        // temp multiply matrix
         for ($i = 0; $i < $size; $i++) {
             for ($j = 0; $j < $size; $j++) {
                 if (!isset($temp[$j])) {
@@ -257,7 +257,7 @@ class Ahp extends AhpBase
             }
         }
 
-        // hitung eigen | prioritas
+        // calculate eigen | prioritas
         $eigen = [];
         for ($i = 0; $i < $size; $i++) {
             $eigen[$i] = 0;
@@ -307,7 +307,7 @@ class Ahp extends AhpBase
         }
         $ci = ($dmax - $size) / ($size - 1);
 
-        $cr = $this->round($ci / $this->getIR($size), 1);
+        $cr = $ci / $this->getIR($size);
 
         return $cr;
     }
