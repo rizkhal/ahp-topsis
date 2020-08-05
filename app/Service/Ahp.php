@@ -6,7 +6,7 @@ namespace App\Service;
 
 use App\Service\Exception\MatrixException;
 
-class Ahp extends AhpBase
+class Ahp extends AhpTopsisBase
 {
     /**
      * Criteria of the matrix
@@ -107,9 +107,10 @@ class Ahp extends AhpBase
         $this->eigenVector = $do['eigen'];
 
         $this->relativeMatrix = [
-            'matrix' => $do['matrix'],
-            'eigen'  => $do['eigen'],
-            'total'  => $do['total'],
+            'matrix'      => $do['matrix'],
+            'eigen'       => $do['eigen'],
+            'total'       => $do['total'],
+            'consistency' => $this->concistencyCheck($matrix, $do['eigen']),
         ];
 
         return $this;
@@ -291,9 +292,9 @@ class Ahp extends AhpBase
      *
      * @param  array  $matrix
      * @param  array  $eigen
-     * @return float
+     * @return array
      */
-    private function concistencyCheck(array $matrix, array $eigen): float
+    private function concistencyCheck(array $matrix, array $eigen): array
     {
         $dmax = 0;
         $size = count($matrix);
@@ -305,11 +306,15 @@ class Ahp extends AhpBase
             $dmax += $e * $eigen[$i];
 
         }
+
         $ci = ($dmax - $size) / ($size - 1);
 
         $cr = $ci / $this->getIR($size);
 
-        return $cr;
+        return [
+            "ci" => $ci,
+            "cr" => $cr,
+        ];
     }
 
     /**
@@ -374,29 +379,5 @@ class Ahp extends AhpBase
     public function getRank(): array
     {
         return $this->finalRanks;
-    }
-
-    /**
-     * Round up the number type float
-     *
-     * @param  array|float $numb
-     * @return array|float
-     */
-    private function round($numb, int $n = 2)
-    {
-        if (is_string($numb)) {
-            throw new MatrixException("Can'nt round type data string.", 1);
-        }
-
-        if (is_array($numb)) {
-            $result = [];
-            for ($i = 0; $i < count($numb); $i++) {
-                $result[] = round($numb[$i], $n);
-            }
-
-            return $result;
-        }
-
-        return round($numb, $n);
     }
 }

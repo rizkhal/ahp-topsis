@@ -22,15 +22,19 @@ class AhpTest extends TestCase
     {
         return [
             [
-                "name" => "Kecepatan",
+                "name" => "View",
                 "type" => 1,
             ],
             [
-                "name" => "Kapasitas",
+                "name" => "Like",
                 "type" => 1,
             ],
             [
-                "name" => "Kenyamanan",
+                "name" => "Dislike",
+                "type" => 1,
+            ],
+            [
+                "name" => "Comment",
                 "type" => 1,
             ],
         ];
@@ -39,9 +43,10 @@ class AhpTest extends TestCase
     protected function matrix(): array
     {
         return [
-            [1.00, 0.33, 5.00],
-            [3.00, 1.00, 5.00],
-            [0.20, 0.20, 1.00],
+            [1.00, 1.5, 2, 3],
+            [0.66, 1.00, 3, 2],
+            [0.5, 0.33, 1.00, 0.5],
+            [0.33, 0.5, 2, 1.00],
         ];
     }
 
@@ -109,21 +114,8 @@ class AhpTest extends TestCase
     public function finalRanks()
     {
         $ahp = $this->ahp->setCriteria($this->criteria())
-                ->setAlternative(['Sepeda', 'Motor', 'Mobil'])
-                ->setBatchCriteriaPairWise($this->pairwise())
-                ->setMatrix($this->matrix())->finalize();
+                ->setMatrix($this->matrix());
 
-        $ranks = $ahp->getRank();
-
-        for ($i = 0; $i < count($ranks); $i++) {
-            $this->assertContainsEquals($ranks[$i]['value'], [0.1746, 0.1865, 0.635]);
-        }
-
-        foreach ($ranks as $r) {
-            foreach ($r as $i => $v) {
-                $this->assertArrayHasKey($i, $r);
-                $this->assertArrayHasKey($i, $r);
-            }
-        }
+        dd($ahp);
     }
 }

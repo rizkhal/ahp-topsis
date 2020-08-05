@@ -4,7 +4,7 @@ declare (strict_types = 1);
 
 namespace App\Service;
 
-class Topsis
+class Topsis extends AhpTopsisBase
 {
     private $matrix;
 
@@ -21,11 +21,11 @@ class Topsis
         for ($i = 0; $i < $size; $i++) {
             for ($j = 0; $j < $size; $j++) {
                 if (isset($matrix[$j][$i])) {
-                    $temp[$i][$j] = $matrix[$j][$i] * $matrix[$j][$i];
+                    $temp[$i][$j] = $matrix[$j][$i];
                 }
             }
         }
 
-        die;
+        dd($temp);
     }
 }

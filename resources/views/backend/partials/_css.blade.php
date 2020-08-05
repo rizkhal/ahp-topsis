@@ -12,4 +12,9 @@
 <!-- Template CSS -->
 <link rel="stylesheet" href="{{asset('backend/css/style.css')}}">
 <link rel="stylesheet" href="{{asset('backend/css/components.css')}}">
+<style type="text/css">
+    .dataTables_length {
+        float:left!important;
+    }    
+</style>
 @stack('styles')

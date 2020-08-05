@@ -26,4 +26,11 @@
 
 <!-- Page Specific JS File -->
 {{-- <script src="{{asset('backend/js/page/index.js')}}"></script> --}}
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
 @stack('scripts')

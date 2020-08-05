@@ -2,12 +2,12 @@
 
 namespace App\DataTables;
 
-use App\Models\Calculate;
+use App\Models\Alternative;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class CalculateDataTable extends DataTable
+class AlternativeDataTable extends DataTable
 {
     protected $query;
 
@@ -21,17 +21,14 @@ class CalculateDataTable extends DataTable
     {
         return datatables()
             ->eloquent($this->query)
-            ->editColumn('created_at', function($model) {
+            ->addIndexColumn()
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
             })
-            ->addColumn('action', function($model) {
+            ->addColumn('action', function ($model) {
                 return '
-                    <button type="button" class="btn btn-info">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                    <button type="button" class="btn btn-danger">
-                        <i class="fa fa-trash"></i>
-                    </button>
+                    <button type="button" data-id="'.$model->id.'" class="btn-edit btn btn-warning"><i class="fa fa-pencil-alt"></i></button>
+                    <button type="button" data-url="'.route('admin.alternative.destroy', $model->id).'" class="btn-destroy btn btn-danger"><i class="fa fa-trash"></i></button>
                 ';
             })
             ->rawColumns(['action']);
@@ -40,10 +37,10 @@ class CalculateDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\CalculateDataTable $model
+     * @param \App\AhpDataTable $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Calculate $model)
+    public function query(Alternative $model)
     {
         $this->query = $model->newQuery();
         return $this->applyScopes($this->query);
@@ -57,12 +54,12 @@ class CalculateDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->addTableClass('table table-hover table-striped')
-            ->setTableId('calculatedatatable-table')
+            ->addTableClass('table table-hover table-stripped')
+            ->setTableId('alternative-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('Bfrtip')
-            ->orderBy(3, 'desc')
+            ->dom('lfrtip')
+            ->orderBy(1)
             ->buttons(
                 Button::make('create'),
                 Button::make('export'),
@@ -80,14 +77,25 @@ class CalculateDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id'),
-            Column::make('title'),
-            Column::make('description'),
-            Column::make('created_at'),
-            Column::computed('action')
+            Column::computed('No')
+                ->defaultContent('')
+                ->data('DT_RowIndex')
+                ->name('DT_RowIndex')
+                ->title('No')
+                ->render(null)
+                ->orderable(false)
+                ->searchable(false)
+                ->footer(''),
+            Column::make('name')
+                ->title('Nama Alterative'),
+            Column::make('nilai')
+                ->title('Nilai Alternative'),
+            Column::make('created_at')
+                ->title('Di Buat'),
+            Column::computed('action', 'Aksi')
                 ->exportable(false)
                 ->printable(false)
-                ->addClass('text-center')
+                ->addClass('text-center'),
         ];
     }
 
@@ -98,6 +106,6 @@ class CalculateDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Ahp-Topsis_' . date('YmdHis');
+        return 'Alternative_' . date('YmdHis');
     }
 }
