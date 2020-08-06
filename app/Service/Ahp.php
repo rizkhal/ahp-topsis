@@ -107,10 +107,9 @@ class Ahp extends AhpTopsisBase
         $this->eigenVector = $do['eigen'];
 
         $this->relativeMatrix = [
-            'matrix'      => $do['matrix'],
-            'eigen'       => $do['eigen'],
-            'total'       => $do['total'],
-            'consistency' => $this->concistencyCheck($matrix, $do['eigen']),
+            'matrix' => $do['matrix'],
+            'eigen'  => $do['eigen'],
+            'total'  => $do['total'],
         ];
 
         return $this;
@@ -379,5 +378,10 @@ class Ahp extends AhpTopsisBase
     public function getRank(): array
     {
         return $this->finalRanks;
+    }
+
+    public function getEigen(): array
+    {
+        return $this->eigenVector;
     }
 }

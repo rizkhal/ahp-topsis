@@ -3,7 +3,7 @@
 @endpush
 <div class="card card-primary">
   <div class="card-header">
-    <h4>Relative Interest Matrix</h4>
+    <h4>Matrix Criteria (AHP)</h4>
     <div class="card-header-action">
       <button type="button" onclick="generateMatrix();" class="btn btn-primary mb-3">Generate</button>
     </div>
@@ -26,7 +26,7 @@
 
 <div class="card card-primary">
   <div class="card-header">
-    <h4>Matrix Pair Wise</h4>
+    <h4>Matrix Criteria (TOPSIS)</h4>
     <div class="card-header-action">
       <button type="button" onclick="generateMatrixPairWise();" class="btn btn-primary mb-3 float-right">Generate</button>
     </div>

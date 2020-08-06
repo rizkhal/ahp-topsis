@@ -29,10 +29,9 @@ class CalculateRequest extends FormRequest
             'title'       => ['required', 'string'],
             'description' => ['required', 'string'],
             'criteria'    => ['required', 'array'],
-            'candidate'   => ['required', 'array'],
-            'row'         => ['required', 'array'],
-            'pairwise'    => ['required', 'array'],
-            'type'        => ['required', 'array'],
+            'alternative' => ['required', 'array'],
+            'ahp'         => ['required', 'array'],
+            'topsis'      => ['required', 'array'],
         ];
     }
 
@@ -42,10 +41,9 @@ class CalculateRequest extends FormRequest
             'title'       => $this->title,
             'description' => $this->description,
             'criteria'    => $this->criteria,
-            'candidate'   => $this->candidate,
-            'row'         => $this->row,
-            'pairwise'    => $this->pairwise,
-            'type'        => $this->type,
+            'alternative' => $this->alternative,
+            'ahp'         => $this->ahp,
+            'topsis'      => $this->topsis,
         ];
     }
 }

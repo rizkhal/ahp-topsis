@@ -44,13 +44,9 @@ const generateMatrix = () => {
 
         var td = '';
         tr += `<th scope="col" class="text-center">${el.value}</th>`;
-        // -------------------------> 
-        // need revision
-        console.log(element.length);
-        // <------------------------
         for (var j = 0; j < element.length; j++) {
             if (element[j].value != "" && element[i].value != "") {
-                td += '<td><input style="min-width:100px!important;" type="text" name="row[' + i + '][' + j + ']" class="form-control table-input" id="table-input-' + i + '-' + j + '" data-i="' + i + '" data-j="' + j + '" value="' + (i == j ? '1' : '') + '" ' + (i == j ? 'readonly ' : 'onKeyUp="return checkInputMatrix(this);"') + 'required /></td>';
+                td += '<td><input style="min-width:100px!important;" type="text" name="ahp[' + i + '][' + j + ']" class="form-control table-input" id="table-input-' + i + '-' + j + '" data-i="' + i + '" data-j="' + j + '" value="' + (i == j ? '1' : '') + '" ' + (i == j ? 'readonly ' : 'onKeyUp="return checkInputMatrix(this);"') + 'required /></td>';
             }
         }
 
@@ -183,7 +179,7 @@ const generateMatrixPairWise = () => {
 
     if(!flag){
         criterias.forEach((element, i) => {
-            printPairWiseMatrix(element, i);
+            printQuantitativeMatrix(element, i);
         });
     }
 };
@@ -196,12 +192,12 @@ const printQuantitativeMatrix = (criteria_name, c) => {
         tbody += `
             <tr>
                 <td>`+element+`</td>
-                <td><input style="min-width:100px!important;" type="text" name="pairwise[`+c+`][]" placeholder="Masukan Nilai" class="table-input form-control" value="" id="table-quantitative-`+c+`-`+i+`" required></td>
+                <td><input style="min-width:100px!important;" type="text" name=topsis[`+c+`][]" placeholder="Masukan Nilai" class="table-input form-control" value="" id="table-quantitative-`+c+`-`+i+`" required></td>
             </tr>
         `;
         i++;
     });
-    var html = (c+1) + `. PairWise Matrix for Criteria : <strong>`+criteria_name+`</strong>
+    var html = (c+1) + `. Data Alternative untuk Criteria : <strong>`+criteria_name+`</strong>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
                         <thead class="black white-text">
@@ -219,6 +215,7 @@ const printQuantitativeMatrix = (criteria_name, c) => {
     $('#pairwise-body').append(html);
 };
 
+// not use in this app
 const printPairWiseMatrix = (criteria_name, c) => {
     var size = candidates.length;
     var tr = `<th scope="col" class="text-center">#</th>`;

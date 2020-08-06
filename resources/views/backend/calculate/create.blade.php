@@ -15,17 +15,17 @@
                 <h2 class="section-title">Perhitungan AHP - TOPSIS</h2>
                 <p class="section-lead">Perhitungan dibuat menggunakan metode AHP dan TOPSIS</p>
 
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('admin.calculate.store') }}">
                     @csrf
-                    <div class="row">
+                    <div class="row">                        
                         <div class="col-12 col-md-12 col-lg-12">
-                            @include("backend::implements.partials.detail")
+                            @include("backend::calculate.partials.detail")
                         </div>
-                        
-                        @include("backend::implements.partials.cc")
+
+                        @include("backend::calculate.partials.cc")
 
                         <div class="col-12 col-md-12 col-lg-12">
-                            @include("backend::implements.partials.ri")
+                            @include("backend::calculate.partials.ri")
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
                             <button type="submit" class="btn btn-primary float-right">Submit</button>

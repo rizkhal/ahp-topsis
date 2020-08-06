@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCriteriasTable extends Migration
+class CreateCalculatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateCriteriasTable extends Migration
      */
     public function up()
     {
-        Schema::create('criterias', function (Blueprint $table) {
+        Schema::create('calculates', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->float('bobot');
-            $table->bigInteger('type');
-            $table->boolean('status')->default(true);
+            $table->json('data');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateCriteriasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('criterias');
+        Schema::dropIfExists('calculates');
     }
 }

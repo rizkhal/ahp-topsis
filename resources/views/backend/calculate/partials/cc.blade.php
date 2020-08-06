@@ -8,10 +8,6 @@
                 <label>Criteria</label>
                 <div class="input-group">
                     <input type="text" name="criteria[]" class="criteria form-control">
-                    <select name="type[]" class="form-control">
-                        <option value="1">Qualitative</option>
-                        <option value="0">Quantitative</option>
-                    </select>
                     <div class="input-group-append">
                         <div class="input-group-text bg-primary" id="clone-criteria">
                             <i class="fas fa-plus text-white"></i>
@@ -25,13 +21,13 @@
 <div class="col-6 col-md-6 col-lg-6">
     <div class="card card-primary">
         <div class="card-header">
-            <h4>Candidate / Alternative</h4>
+            <h4>Alternative</h4>
         </div>
         <div class="card-body">
             <div id="candidate-container" class="form-group">
-                <label>Candidate</label>
+                <label>Alternative</label>
                 <div class="input-group">
-                    <input type="text" name="candidate[]" class="alternative form-control">
+                    <input type="text" name="alternative[]" class="alternative form-control">
                     <div class="input-group-append">
                         <div class="input-group-text bg-primary" id="clone-candidate">
                             <i class="fas fa-plus text-white"></i>
@@ -71,12 +67,12 @@
                         </select>
                     `;
 
-            createElement("criteria-container", "div", "criteria-" + counter, inputElements("criteria-"+counter, "criteria[]", "criteria", select));
+            createElement("criteria-container", "div", "criteria-" + counter, inputElements("criteria-"+counter, "criteria[]", "criteria"));
         }, false);
 
         candidate.addEventListener("click", () => {
             counter++;
-            createElement("candidate-container", "div", "candidate-"+counter, inputElements("candidate-"+counter, "candidate[]", "alternative"));
+            createElement("candidate-container", "div", "candidate-"+counter, inputElements("candidate-"+counter, "alternative[]", "alternative"));
         }, false);
 
         const inputElements = (id, name, classes, type = "") => {

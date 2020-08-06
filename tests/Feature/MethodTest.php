@@ -22,19 +22,15 @@ class AhpTest extends TestCase
     {
         return [
             [
-                "name" => "View",
+                "name" => "Kecepatan",
                 "type" => 1,
             ],
             [
-                "name" => "Like",
+                "name" => "Kenyamanan",
                 "type" => 1,
             ],
             [
-                "name" => "Dislike",
-                "type" => 1,
-            ],
-            [
-                "name" => "Comment",
+                "name" => "Kapasitas",
                 "type" => 1,
             ],
         ];
@@ -43,10 +39,9 @@ class AhpTest extends TestCase
     protected function matrix(): array
     {
         return [
-            [1.00, 1.5, 2, 3],
-            [0.66, 1.00, 3, 2],
-            [0.5, 0.33, 1.00, 0.5],
-            [0.33, 0.5, 2, 1.00],
+            [1.00, 0.33, 5.00],
+            [3.00, 1.00, 5.00],
+            [4.20, 1.53, 1.00],
         ];
     }
 
@@ -71,51 +66,33 @@ class AhpTest extends TestCase
         ];
     }
 
+    protected function method()
+    {
+        return $this->ahp
+                ->setCriteria($this->criteria())
+                ->setAlternative(['Sepeda', 'Motor', 'Mobil'])
+                ->setMatrix($this->matrix())
+                ->setBatchCriteriaPairWise($this->pairWise())
+                ->finalize();
+    }
+
     /**
      * @test
-     * @group f-ahp
+     * @group f-method
      */
-    public function setCriteria()
+    public function methodAhp()
     {
+        $data = $this->method();
         $this->assertTrue(true);
     }
 
     /**
      * @test
-     * @group f-ahp
+     * @group f-method
      */
-    public function setAlternative()
+    public function methodTopsis()
     {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * @test
-     * @group f-ahp
-     */
-    public function setBatchCriteriaPairWise()
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * @test
-     * @group f-ahp
-     */
-    public function setMatrix()
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * @test
-     * @group f-ahp
-     */
-    public function finalRanks()
-    {
-        $ahp = $this->ahp->setCriteria($this->criteria())
-                ->setMatrix($this->matrix());
-
-        dd($ahp);
+        $data = $this->method();
+        dd($data->getMatrix());
     }
 }
