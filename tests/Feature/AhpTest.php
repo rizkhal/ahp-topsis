@@ -85,14 +85,4 @@ class AhpTest extends TestCase
         $data = $this->method();
         $this->assertTrue(true);
     }
-
-    /**
-     * @test
-     * @group f-method
-     */
-    public function methodTopsis()
-    {
-        $data = $this->method();
-        dd($data->getMatrix());
-    }
 }

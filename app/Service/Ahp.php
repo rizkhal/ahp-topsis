@@ -380,6 +380,11 @@ class Ahp extends AhpTopsisBase
         return $this->finalRanks;
     }
 
+    /**
+     * Get eigen vector from the matrix
+     * 
+     * @return array
+     */
     public function getEigen(): array
     {
         return $this->eigenVector;

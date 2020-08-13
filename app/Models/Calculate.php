@@ -42,13 +42,12 @@ class Calculate extends Model
 
         // normalisasi matrix alternative
         // menggunakan metode TOPSIS
-        // dan mengalikan masing2 kriteria
+        // dan mengalikan masing2 nilai kriteria
         // dengan bobot eigenVector dari metode AHP
-        $topsis = $this->topsis->normalize($data['topsis'])->calculateWieght($eigenVector);
+        $topsis = $this->topsis->normalize($data['topsis'])->calculateWeight($eigenVector)->calculateDistance()->getDistance();
 
-        dd($topsis->getDistance());
+        dd($topsis);
 
-        die;
         return false;
     }
 }

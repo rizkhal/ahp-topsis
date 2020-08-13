@@ -16,9 +16,9 @@ class CalculateController extends Controller
     public function store(CalculateRequest $request, Calculate $model)
     {
         if ($model->calculate($request->data())) {
-            ddd('true');
+            dd('true');
         }
 
-        ddd('false');
+        dd('false');
     }
 }
