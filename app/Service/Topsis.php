@@ -16,27 +16,6 @@ class Topsis extends AhpTopsisBase
     private $rank;
 
     /**
-     * Solution ideal from the matrix
-     *
-     * @var array
-     */
-    private $solution;
-
-    /**
-     * Plus ideal solution
-     *
-     * @var array
-     */
-    private $smax;
-
-    /**
-     * Minus ideal solution
-     *
-     * @var array
-     */
-    private $smin;
-
-    /**
      * The weight of the matrix
      *
      * @var array
@@ -51,7 +30,14 @@ class Topsis extends AhpTopsisBase
     private $normalize;
 
     /**
-     * Distance from the matrix
+     * The ideal solution
+     *
+     * @var array
+     */
+    private $solution;
+
+    /**
+     * The distance
      *
      * @var array
      */
@@ -94,66 +80,62 @@ class Topsis extends AhpTopsisBase
      * @param  array  $eigen The weight from AHP method
      * @return self
      */
-    public function calculateWeight(array $eigen): self
+    public function calculate(array $eigen): self
     {
+        // validate the given eigen and normalize matrix
         if (count($this->normalize) != $size = count($eigen)) {
             throw new MatrixException("The eigen vector from AHP matrix doesnt match with TOPSIS normalize matrix", 1);
         }
 
+        // calculate the weight
+        // eigen matrix passing from AHP method
         for ($i = 0; $i < $size; $i++) {
             for ($j = 0; $j < $size; $j++) {
                 if (array_keys($this->normalize[$i]) == array_keys($eigen)) {
-                    $this->weight[$i][$j] = $this->normalize[$i][$j] * $eigen[$i];
+                    $weight[$i][$j] = $this->normalize[$i][$j] * $eigen[$i];
                 }
-            }
-        }
 
-        return $this;
-    }
-
-    /**
-     * Get the ideal solution
-     *
-     * @return self
-     */
-    public function calculateIdealSolution(): self
-    {
-        for ($i = 0; $i < $size = count($this->weight); $i++) {
-            for ($j = 0; $j < $size; $j++) {
-                $this->smax[$i] = max($this->weight[$i]);
-                $this->smin[$i] = min($this->weight[$i]);
+                $smax[$i] = max($weight[$i]);
+                $smin[$i] = min($weight[$i]);
             }
         }
 
         $this->solution = [
-            'smax' => $this->smax,
-            'smin' => $this->smin,
+            'plus'  => $smax,
+            'minus' => $smin,
         ];
 
-        return $this;
-    }
-
-    /**
-     * Calculate distance from the given matrix
-     *
-     * @return self
-     */
-    public function calculateDistance(): self
-    {
-        for ($i = 0; $i < $size = count($this->weight); $i++) {
+        // calculate the distance
+        // the `$smax` and `$smin` is ideal solution plus and min
+        for ($i = 0; $i < $size; $i++) {
             for ($j = 0; $j < $size; $j++) {
-                $dmax1[$i][$j] = pow($this->weight[$i][$j] - $this->smax[$i], 2);
-                $dmin1[$i][$j] = pow($this->weight[$i][$j] - $this->smin[$i], 2);
+                $dmax[$i][$j] = pow($weight[$i][$j] - $smax[$i], 2);
+                $dmin[$i][$j] = pow($weight[$i][$j] - $smin[$i], 2);
             }
 
-            $dmax[$i] = sqrt(array_sum($dmax1[$i]));
-            $dmin[$i] = sqrt(array_sum($dmin1[$i]));
+            $dmax[$i] = sqrt(array_sum($dmax[$i]));
+            $dmin[$i] = sqrt(array_sum($dmin[$i]));
         }
 
         $this->distance = [
-            'dmax' => $dmax,
-            'dmin' => $dmin,
+            'plus'  => $dmax,
+            'minus' => $dmin,
         ];
+
+        // calculate the rank
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                $dmax[$i] += pow($smax[$i] - $weight[$i][$j], 2);
+                $dmin[$i] += pow($smin[$i] - $weight[$j][$i], 2);
+            }
+
+            $dmaxnormalize[$i] = sqrt($dmax[$i]);
+            $dminnormalize[$i] = sqrt($dmin[$i]);
+
+            $result[$i] = $dminnormalize[$i] / $dmaxnormalize[$i] + $dminnormalize[$i];
+        }
+
+        dd($dmax, $dmin, $result);
 
         return $this;
     }
@@ -167,7 +149,6 @@ class Topsis extends AhpTopsisBase
     {
         return [
             'normalize' => $this->normalize,
-            'weight'    => $this->weight,
             'solution'  => $this->solution,
             'distance'  => $this->distance,
             'ranks'     => $this->rank,

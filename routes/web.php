@@ -8,4 +8,6 @@ Route::prefix("admin")->middleware("auth")->as("admin.")->group(function () {
         Route::get('/', [CalculateController::class, 'create'])->name('create');
         Route::post('store', [CalculateController::class, 'store'])->name('store');
     });
+
+    Route::resource('students', StudentController::class)->except('show');
 });

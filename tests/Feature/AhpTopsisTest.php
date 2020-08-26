@@ -102,7 +102,8 @@ class AhpTopsisTest extends TestCase
      */
     public function calculate()
     {
-        $topsis = $this->topsis->normalize($this->topsisMatrix())->calculateWeight($this->getEigen())->calculateIdealSolution()->calculateDistance();
-        dd($topsis->getResult());
+        $topsis = $this->topsis->normalize($this->topsisMatrix())->calculate($this->getEigen())->getResult();
+        
+        dd($topsis);
     }
 }

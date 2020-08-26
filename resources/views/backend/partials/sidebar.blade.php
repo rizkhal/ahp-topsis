@@ -9,8 +9,10 @@
     <ul class="sidebar-menu">
       <li class="{{active("admin/dashboard*")}}"><a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
       <li class="menu-header">Perhitungan</li>
-      <li class="{{ active('admin/calculate*') }}"><a class="nav-link" href="{{ route('admin.calculate.create') }}"><i class="fas fa-fire"></i> <span>Buat Perhitungan</span></a></li>
-      <li class="#"><a class="nav-link" href="#"><i class="fas fa-fire"></i> <span>Hasil Perhitungan</span></a></li>
+      <li class="{{ active('admin/calculate*') }}"><a class="nav-link" href="{{ route('admin.calculate.create') }}"><i class="fas fa-calculator"></i> <span>Buat Perhitungan</span></a></li>
+      <li class="#"><a class="nav-link" href="#"><i class="fas fa-bomb"></i> <span>Hasil Perhitungan</span></a></li>
+      <li class="menu-header">Data Master</li>
+      <li class="{{active('admin/students*')}}"><a class="nav-link" href="{{ route('admin.students.index') }}"><i class="fas fa-users"></i> <span>Siswa</span></a></li>
     </ul>
 
     <div class="mt-4 mb-4 p-3 hide-sidebar-mini">

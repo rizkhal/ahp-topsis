@@ -44,7 +44,7 @@ class Calculate extends Model
         // menggunakan metode TOPSIS
         // dan mengalikan masing2 nilai kriteria
         // dengan bobot eigenVector dari metode AHP
-        $topsis = $this->topsis->normalize($data['topsis'])->calculateWeight($eigenVector)->calculateDistance()->getDistance();
+        $topsis = $this->topsis->normalize($data['topsis'])->calculate($eigenVector)->getResult();
 
         dd($topsis);
 
