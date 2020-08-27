@@ -26,9 +26,20 @@ class StudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'   => ['required', 'string', 'min:3'],
-            'nis'    => ['required', 'string'],
-            'gender' => ['required', 'integer'],
+            'name'    => ['required', 'string', 'min:3'],
+            'nis'     => ['required', 'string'],
+            'gender'  => ['required', 'integer'],
+            'address' => ['required', 'string'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required'    => 'Nama tidak boleh kosong',
+            'nis.required'     => 'Nomor induk tidak boleh kosong',
+            'gender.required'  => 'Jenis kelamin tidak boleh kosong',
+            'address.required' => 'Alamat tidak boleh kosong',
         ];
     }
 
@@ -40,9 +51,10 @@ class StudentRequest extends FormRequest
     public function data(): array
     {
         return [
-            'name'   => $this->name,
-            'nis'    => $this->nis,
-            'gender' => $this->gender,
+            'name'    => $this->name,
+            'nis'     => $this->nis,
+            'gender'  => $this->gender,
+            'address' => $this->address,
         ];
     }
 }

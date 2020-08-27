@@ -2,11 +2,9 @@
 
 namespace App\DataTables;
 
+use App\Constants\Gender;
 use App\Models\Student;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
 class StudentDataTable extends DataTable
@@ -23,7 +21,21 @@ class StudentDataTable extends DataTable
     {
         return datatables()
             ->eloquent($this->query)
-            ->addColumn('action', 'studentdatatable.action');
+            ->addIndexColumn()
+            ->editColumn('gender', function($model) {
+                return Gender::label($model->gender);
+            })
+            ->addColumn('action', function ($model) {
+                return '
+                    <a href="'.route('admin.students.edit', $model->id).'" class="btn btn-sm btn-warning">
+                        <i class="fa fa-pencil-alt"></i>
+                    </a>
+                    <button class="btn btn-sm btn-danger btn-destroy" data-url="'.route('admin.students.destroy', $model->id).'">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                ';
+            })
+            ->rawColumns(['action']);
     }
 
     /**
@@ -46,11 +58,12 @@ class StudentDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('student-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1);
+            ->setTableId('student-table')
+            ->addTableClass('table table-hover table-striped')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('lfrtip')
+            ->orderBy(1);
     }
 
     /**
@@ -61,14 +74,23 @@ class StudentDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::computed('No')
+                ->defaultContent('')
+                ->data('DT_RowIndex')
+                ->name('DT_RowIndex')
+                ->title('No')
+                ->render(null)
+                ->orderable(false)
+                ->searchable(false)
+                ->footer(''),
+            Column::make('name')->title('Name'),
+            Column::make('nis')->title('Nomor Induk'),
+            Column::make('gender')->title('Jenis Kelamin'),
+            Column::make('address')->title('Alamat'),
+            Column::computed('action', 'Aksi')
+                ->exportable(false)
+                ->printable(false)
+                ->addClass('text-center'),
         ];
     }
 

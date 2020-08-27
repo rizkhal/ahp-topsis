@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Gender;
 use App\DataTables\StudentDataTable;
 use App\Http\Requests\StudentRequest;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -25,7 +27,9 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('backend::students.create');
+        return view('backend::students.create', [
+            'genders' => Gender::labels(),
+        ]);
     }
 
     /**
@@ -37,10 +41,12 @@ class StudentController extends Controller
     public function store(StudentRequest $request, Student $model)
     {
         if ($model->store($request->data())) {
-            return redirect()->back();
+            notice('success', 'Berhasil menambah siswa baru.');
+            return redirect()->route('admin.students.index');
         }
 
-        dd('error');
+        notice('error', 'Maaf, terjadi kesalahan.');
+        return redirect()->back();
     }
 
     /**
@@ -52,6 +58,7 @@ class StudentController extends Controller
     public function edit(Student $model, $id)
     {
         return view('backend::students.edit', [
+            'genders' => Gender::labels(),
             'student' => $model->findOrFail($id),
         ]);
     }
@@ -66,10 +73,12 @@ class StudentController extends Controller
     public function update(StudentRequest $request, Student $model, $id)
     {
         if ($model->edit($request->data(), $id)) {
-            return redirect()->back();
+            notice('success', 'Berhasil mengubah data siswa.');
+            return redirect()->route('admin.students.index');
         }
 
-        dd('error');
+        notice('error', 'Maaf, terjadi kesalahan.');
+        return redirect()->back();
     }
 
     /**

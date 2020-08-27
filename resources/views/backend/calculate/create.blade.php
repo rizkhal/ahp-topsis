@@ -28,7 +28,7 @@
                             @include("backend::calculate.partials.ri")
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
-                            <button type="submit" class="btn btn-primary float-right">Submit</button>
+                            <button type="submit" class="btn btn-primary float-right">Hitung</button>
                         </div>
                     </div>
                 </form>
