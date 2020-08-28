@@ -7,4 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Alternative extends Model
 {
     protected $guarded = [];
+
+    protected $casts = [
+        'data' => 'json'
+    ];
 }

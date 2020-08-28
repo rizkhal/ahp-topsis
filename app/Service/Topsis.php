@@ -13,7 +13,7 @@ class Topsis extends AhpTopsisBase
      *
      * @var array
      */
-    private $rank;
+    private $result;
 
     /**
      * The weight of the matrix
@@ -122,7 +122,8 @@ class Topsis extends AhpTopsisBase
             'minus' => $dmin,
         ];
 
-        // calculate the rank
+        // calculate the result of the matrix
+        // need revision 3(-_-)3
         for ($i = 0; $i < $size; $i++) {
             for ($j = 0; $j < $size; $j++) {
                 $dmax[$i] += pow($smax[$i] - $weight[$i][$j], 2);
@@ -132,7 +133,7 @@ class Topsis extends AhpTopsisBase
             $dmaxnormalize[$i] = sqrt($dmax[$i]);
             $dminnormalize[$i] = sqrt($dmin[$i]);
 
-            $result[$i] = $dminnormalize[$i] / $dmaxnormalize[$i] + $dminnormalize[$i];
+            $this->result[$i] = $dminnormalize[$i] / $dmaxnormalize[$i] + $dminnormalize[$i];
         }
 
         return $this;
@@ -149,7 +150,17 @@ class Topsis extends AhpTopsisBase
             'normalize' => $this->normalize,
             'solution'  => $this->solution,
             'distance'  => $this->distance,
-            'ranks'     => $this->rank,
+            'result'    => $this->result,
         ];
+    }
+
+    /**
+     * Calculate the rank
+     *
+     * @return array
+     */
+    public function getRank(): array
+    {
+        return [];
     }
 }

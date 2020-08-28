@@ -15,6 +15,7 @@ class CreateCalculatesTable extends Migration
     {
         Schema::create('calculates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('student_id')->constrained('students')->onUpdate('cascade')->onDelete('cascade');
             $table->json('data');
             $table->timestamps();
         });

@@ -1,11 +1,11 @@
 <div class="col-6 col-md-6 col-lg-6">
     <div class="card card-primary">
         <div class="card-header">
-            <h4>Criteria</h4>
+            <h4>Criteria / Candidate</h4>
         </div>
         <div class="card-body">
             <div id="criteria-container" class="form-group">
-                <label>Criteria</label>
+                <label>Criteria / Candidate</label>
                 <div class="input-group">
                     <input type="text" name="criteria[]" class="criteria form-control">
                     <div class="input-group-append">
@@ -43,10 +43,6 @@
     <style type="text/css">
         .input-group-append > div {
             cursor: pointer;
-        }
-        select.form-control {
-            cursor: pointer;
-            -webkit-appearance: none;
         }
     </style>
 @endpush

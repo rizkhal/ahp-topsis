@@ -1,5 +1,15 @@
 <x-app-layout title="Buat Perhitungan">
 
+    @push('styles')
+        <style lang="css">
+            button[type='submit']:disabled {
+                cursor: not-allowed;
+                border: 1px solid #6274fc;
+                background-color: #6274fc;
+            }
+        </style>
+    @endpush
+
     @section("app")
         <section class="section">
             {{-- breadcrumb --}}
@@ -31,7 +41,7 @@
                             @include("backend::calculate.partials.ri")
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
-                            <button type="submit" class="btn btn-primary float-right">Hitung</button>
+                            <button type="submit" class="btn btn-primary float-right" {{(!$students->exists()) ? 'disabled' : ''}}>Hitung</button>
                         </div>
                     </div>
                 </form>

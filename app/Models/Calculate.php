@@ -26,7 +26,7 @@ class Calculate extends Model
         $this->topsis = new Topsis;
     }
 
-    public function calculate(array $data): array
+    public function calculate(array $data): bool
     {
         foreach ($data['criteria'] as $i => $c) {
             $criteria[] = [
@@ -35,12 +35,9 @@ class Calculate extends Model
             ];
         }
 
-        // menghitung eigen vector dari
-        // criteria matrix dengan metode AHP
-        $eigenVector = $this->ahp->setCriteria($criteria)->setMatrix($data['ahp'])->getEigen();
+        $eigen  = $this->ahp->setCriteria($criteria)->setMatrix($data['ahp'])->getEigen();
+        $topsis = $this->topsis->normalize($data['topsis'])->calculate($eigenVector)->getResult();
 
-        // masukan ke array
-        // untuk ditampilkan dalam bentuk tabel
         foreach ($criteria as $i => $value) {
             $eigen[] = [
                 'criteria'    => $value['name'],
@@ -48,15 +45,16 @@ class Calculate extends Model
             ];
         }
 
-        // normalisasi matrix alternative
-        // menggunakan metode TOPSIS
-        // dan mengalikan masing2 nilai kriteria
-        // dengan bobot eigenVector dari metode AHP
-        $topsis = $this->topsis->normalize($data['topsis'])->calculate($eigenVector)->getResult();
-
-        return [
-            'eigen'     => $eigen,
-            'normalize' => $topsis['normalize'],
+        $merge  = array_merge(['eigen' => $eigen], $topsis);
+        $result = [
+            'student_id' => $data['student'],
+            'data'       => json_encode($merge),
         ];
+
+        if (self::create($result)) {
+            return true;
+        }
+
+        return false;
     }
 }
