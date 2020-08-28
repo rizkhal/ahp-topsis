@@ -1,11 +1,4 @@
 <x-app-layout title="Buat Perhitungan">
-    @push('styles')
-        <style type="text/css">
-            textarea.form-control {
-                min-height: 7em!important;
-            }
-        </style>
-    @endpush
 
     @section("app")
         <section class="section">
@@ -14,6 +7,16 @@
             <div class="section-body">
                 <h2 class="section-title">Perhitungan AHP - TOPSIS</h2>
                 <p class="section-lead">Perhitungan dibuat menggunakan metode AHP dan TOPSIS</p>
+
+                @if (!$students->exists())
+                    <div class="alert alert-info alert-has-icon">
+                      <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                      <div class="alert-body">
+                        <div class="alert-title">Info</div>
+                        Data siswa masih kosong, silahkan tambahkan data siswa terlebih dahulu.
+                      </div>
+                    </div>
+                @endif
 
                 <form method="POST" action="{{ route('admin.calculate.store') }}">
                     @csrf
@@ -32,6 +35,7 @@
                         </div>
                     </div>
                 </form>
+                
             </div>
         </section>
     @stop

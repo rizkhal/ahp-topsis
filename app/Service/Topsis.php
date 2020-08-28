@@ -135,8 +135,6 @@ class Topsis extends AhpTopsisBase
             $result[$i] = $dminnormalize[$i] / $dmaxnormalize[$i] + $dminnormalize[$i];
         }
 
-        dd($dmax, $dmin, $result);
-
         return $this;
     }
 

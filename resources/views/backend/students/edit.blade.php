@@ -1,18 +1,4 @@
 <x-app-layout title="Ubah Siswa {{$student->name}}">
-    @push('styles')
-        <style type="text/css">
-            select {
-               -o-appearance: none;
-               -ms-appearance: none;
-               -webkit-appearance: none;
-               -moz-appearance: none;
-               appearance: none;
-            }
-            textarea.form-control {
-                min-height: 7em!important;
-            }
-        </style>
-    @endpush
 
     @section("app")
         <section class="section">

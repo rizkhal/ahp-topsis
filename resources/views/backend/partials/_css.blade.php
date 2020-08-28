@@ -11,6 +11,16 @@
 <style type="text/css">
     .dataTables_length {
         float:left!important;
-    }    
+    }
+    select {
+       -o-appearance: none;
+       -ms-appearance: none;
+       -webkit-appearance: none;
+       -moz-appearance: none;
+       appearance: none;
+    }
+    textarea.form-control {
+        min-height: 7em!important;
+    }
 </style>
 @stack('styles')
