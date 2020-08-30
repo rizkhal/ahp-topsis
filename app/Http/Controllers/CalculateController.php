@@ -43,7 +43,7 @@ class CalculateController extends Controller
      */
     public function alternative(Request $request, Alternative $alternative)
     {
-        $alternatives = $alternateve->searchByName($request->query());
+        $alternatives = $alternative->searchByName($request->query());
         $data         = [];
 
         foreach ($alternatives as $i => $row) {

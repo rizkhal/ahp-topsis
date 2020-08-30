@@ -9,5 +9,6 @@ Route::prefix("admin")->middleware("auth")->as("admin.")->group(function () {
 
     Route::prefix('json')->as('json.')->group(function () {
         Route::get('search-student', 'CalculateController@student')->name('student');
+        Route::get('search-alternative', 'CalculateController@alternative')->name('alternative');
     });
 });

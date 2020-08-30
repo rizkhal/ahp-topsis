@@ -19,6 +19,27 @@
     </div>
 </div>
 
+<div class="col-6 col-md-6 col-lg-6">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h4>Alternative</h4>
+            <div class="card-header-action">
+                <button type="button" class="btn btn-sm btn-primary btn-clone-alternative">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-remove-alternative">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group alternative-container">
+                <select name="alternative[]" class="alternative form-control"></select>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('styles')
     <link rel="stylesheet" href="https://demo.getstisla.com/assets/modules/select2/dist/css/select2.min.css">
     <style type="text/css">
@@ -67,6 +88,7 @@
                 }
             };
 
+            // criteria
             btnRemove($('.criteria'), $('.btn-remove-criteria'));
             select2($('.criteria'), '{{ route("admin.json.student") }}');
 
@@ -85,6 +107,27 @@
                 $(this).closest('.card').find('.criteria').not(':first').last().remove();
 
                 btnRemove($('.criteria'), $('.btn-remove-criteria'));
+            });
+
+            // alternative
+            btnRemove($('.alternative'), $('.btn-remove-alternative'));
+            select2($('.alternative'), '{{ route("admin.json.alternative") }}');
+
+            $('.btn-clone-alternative').click(function() {
+                $('.alternative').select2('destroy');
+
+                $(this).closest('.card').find('.alternative').first().clone(true).appendTo('.alternative-container');
+
+                select2($('.alternative'), '{{ route("admin.json.alternative") }}');
+
+                btnRemove($('.alternative'), $('.btn-remove-alternative'));
+            });
+
+            $('.btn-remove-alternative').click(function() {
+                $(this).closest('.card').find('.select2').not(':first').last().remove();
+                $(this).closest('.card').find('.alternative').not(':first').last().remove();
+
+                btnRemove($('.alternative'), $('.btn-remove-alternative'));
             });
         });
     </script>
