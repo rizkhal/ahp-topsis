@@ -15,8 +15,8 @@ class CreateAlternativesTable extends Migration
     {
         Schema::create('alternatives', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->onUpdate('cascade')->onDelete('cascade');
-            $table->json('data');
+            $table->string('name');
+            $table->longText('description')->nullable();
             $table->timestamps();
         });
     }

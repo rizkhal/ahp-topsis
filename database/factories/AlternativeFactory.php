@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Alternative::class, function (Faker $faker) {
     return [
-        'name'  => $faker->name,
-        'nilai' => rand(1, 9),
+        'name'        => $faker->name,
+        'description' => $faker->text,
     ];
 });

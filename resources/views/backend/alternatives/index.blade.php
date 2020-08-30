@@ -51,9 +51,9 @@
     @section("app")
         <section class="section">
             {{-- breadcrumb --}}
-            <x-breadcrumb title="Students"></x-breadcrumb>
+            <x-breadcrumb title="Alternative"></x-breadcrumb>
             <div class="section-body">
-                <a href="{{ route('admin.students.create') }}" class="btn btn-primary mb-2" style="color:white;">
+                <a href="{{ route('admin.alternatives.create') }}" class="btn btn-primary mb-2" style="color:white;">
                     <i class="fa fa-plus"></i> Tambah
                 </a>
                 <div class="card">
@@ -67,3 +67,4 @@
         </section>
     @stop
 </x-app-layout>
+    

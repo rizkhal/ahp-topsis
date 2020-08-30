@@ -11,6 +11,24 @@ class Student extends Model
     protected $guarded = [];
 
     /**
+     * Search the student by name
+     * This method for handle select2 ajax request
+     *
+     * @param  array  $params
+     * @return array
+     */
+    public function searchByName(array $params)
+    {
+        $query = self::query();
+
+        if (isset($params['q'])) {
+            $query->where('name', 'like', '%' . $params['q'] . '%');
+        }
+
+        return $query->take(10)->get();
+    }
+
+    /**
      * Save student into database
      *
      * @param  array $request

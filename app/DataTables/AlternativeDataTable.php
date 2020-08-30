@@ -2,14 +2,18 @@
 
 namespace App\DataTables;
 
-use App\Constants\Gender;
-use App\Models\Student;
+use App\Models\Alternative;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class StudentDataTable extends DataTable
+class AlternativeDataTable extends DataTable
 {
-    private $query;
+    /**
+     * Query of the alternative
+     *
+     * @var object
+     */
+    protected $query;
 
     /**
      * Build DataTable class.
@@ -22,29 +26,33 @@ class StudentDataTable extends DataTable
         return datatables()
             ->eloquent($this->query)
             ->addIndexColumn()
-            ->editColumn('gender', function($model) {
-                return Gender::label($model->gender);
+            ->editColumn('description', function($model) {
+                if (is_null($model->description)) {
+                    return '<span class="badge badge-info">Kosong</span>';
+                }
+
+                return $model->description;
             })
             ->addColumn('action', function ($model) {
                 return '
-                    <a href="'.route('admin.students.edit', $model->id).'" class="btn btn-sm btn-warning">
+                    <a href="' . route('admin.alternatives.edit', $model->id) . '" class="btn btn-sm btn-warning">
                         <i class="fa fa-pencil-alt"></i>
                     </a>
-                    <button class="btn btn-sm btn-danger btn-destroy" data-url="'.route('admin.students.destroy', $model->id).'">
+                    <button class="btn btn-sm btn-danger btn-destroy" data-url="' . route('admin.alternatives.destroy', $model->id) . '">
                         <i class="fa fa-trash"></i>
                     </button>
                 ';
             })
-            ->rawColumns(['action']);
+            ->rawColumns(['description', 'action']);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Student $model
+     * @param \App\Models\Alternative $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Student $model)
+    public function query(Alternative $model)
     {
         $this->query = $model->newQuery();
         return $this->applyScopes($this->query);
@@ -58,8 +66,8 @@ class StudentDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('student-table')
-            ->addTableClass('table table-hover table-striped')
+            ->setTableId('alternative-table')
+            ->addTableClass('table table-hover table-stripped')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('lfrtip')
@@ -84,9 +92,7 @@ class StudentDataTable extends DataTable
                 ->searchable(false)
                 ->footer(''),
             Column::make('name')->title('Nama'),
-            Column::make('nis')->title('Nomor Induk'),
-            Column::make('gender')->title('Jenis Kelamin'),
-            Column::make('address')->title('Alamat'),
+            Column::make('description')->title('Deskripsi'),
             Column::computed('action', 'Aksi')
                 ->exportable(false)
                 ->printable(false)
@@ -101,6 +107,6 @@ class StudentDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Student_' . date('YmdHis');
+        return 'Alternative_' . date('YmdHis');
     }
 }

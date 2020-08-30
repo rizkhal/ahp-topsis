@@ -1,105 +1,92 @@
 <div class="col-6 col-md-6 col-lg-6">
     <div class="card card-primary">
         <div class="card-header">
-            <h4>Criteria / Candidate</h4>
-        </div>
-        <div class="card-body">
-            <div id="criteria-container" class="form-group">
-                <label>Criteria / Candidate</label>
-                <div class="input-group">
-                    <input type="text" name="criteria[]" class="criteria form-control">
-                    <div class="input-group-append">
-                        <div class="input-group-text bg-primary" id="clone-criteria">
-                            <i class="fas fa-plus text-white"></i>
-                        </div>
-                    </div>
-                </div>
+            <h4>Candidate</h4>
+            <div class="card-header-action">
+                <button type="button" class="btn btn-sm btn-primary btn-clone-criteria">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-remove-criteria">
+                    <i class="fa fa-minus"></i>
+                </button>
             </div>
         </div>
-    </div>
-</div>
-<div class="col-6 col-md-6 col-lg-6">
-    <div class="card card-primary">
-        <div class="card-header">
-            <h4>Alternative</h4>
-        </div>
         <div class="card-body">
-            <div id="candidate-container" class="form-group">
-                <label>Alternative</label>
-                <div class="input-group">
-                    <input type="text" name="alternative[]" class="alternative form-control">
-                    <div class="input-group-append">
-                        <div class="input-group-text bg-primary" id="clone-candidate">
-                            <i class="fas fa-plus text-white"></i>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-group criteria-container">
+                <select name="criteria[]" class="criteria form-control"></select>
             </div>
         </div>
     </div>
 </div>
 
 @push('styles')
+    <link rel="stylesheet" href="https://demo.getstisla.com/assets/modules/select2/dist/css/select2.min.css">
     <style type="text/css">
         .input-group-append > div {
             cursor: pointer;
+        }
+        .select2-container {
+            margin-top: 1em!important;
+        }
+        .select2-selection__rendered {
+            line-height: 3em!important;
+        }
+        .select2-container--default .select2-selection--single {
+            width: 100%!important;
+            border-color: #e4e6fc;
+            background-color: #fdfdff;
         }
     </style>
 @endpush
 
 @push('scripts')
+    <script src="https://demo.getstisla.com/assets/modules/select2/dist/js/select2.full.min.js"></script>
     <script type="text/javascript">
-        let counter   = 0,
-            criteria  = document.getElementById("clone-criteria"),
-            candidate = document.getElementById("clone-candidate");
+        $(document).ready(function() {
+            // custom select2
+            const select2 = (element, url) => {
+                element.select2({
+                    ajax: {
+                        url: url,
+                        dataType: 'json',
+                        delay: 250,
+                        processResults: function(data) {
+                            return data;
+                        },
+                        cache: true
+                    }
+                });
+            };
 
-        criteria.addEventListener("click", () => {
-            counter++;
+            // enable / disable remove button
+            const btnRemove = (element, btnRemove) => {
+                if (element.length <= 1) {
+                    btnRemove.prop('disabled', true);
+                } else {
+                    btnRemove.prop('disabled', false);
+                }
+            };
 
-            var select = `
-                        <select name="type[]" class="form-control">
-                            <option value="1">Qualitative</option>
-                            <option value="0">Quantitative</option>
-                        </select>
-                    `;
+            btnRemove($('.criteria'), $('.btn-remove-criteria'));
+            select2($('.criteria'), '{{ route("admin.json.student") }}');
 
-            createElement("criteria-container", "div", "criteria-" + counter, inputElements("criteria-"+counter, "criteria[]", "criteria"));
-        }, false);
+            $('.btn-clone-criteria').click(function() {
+                $('.criteria').select2('destroy');
 
-        candidate.addEventListener("click", () => {
-            counter++;
-            createElement("candidate-container", "div", "candidate-"+counter, inputElements("candidate-"+counter, "alternative[]", "alternative"));
-        }, false);
+                $(this).closest('.card').find('.criteria').first().clone(true).appendTo('.criteria-container');
 
-        const inputElements = (id, name, classes, type = "") => {
-            return `
-                <div class="input-group mt-2">
-                    <input type="text" name="${name}" class="form-control ${classes}">
-                    ${type}
-                    <div class="input-group-append">
-                        <div class="input-group-text bg-danger" onclick="javascript:removeElement('${id}'); return false;">
-                            <i class="fas fa-minus text-white"></i>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
+                select2($('.criteria'), '{{ route("admin.json.student") }}');
 
-        const createElement = (parentId, elementTag, elementId, html) => {
-            var element    = document.getElementById(parentId),
-                newElement = document.createElement(elementTag);
+                btnRemove($('.criteria'), $('.btn-remove-criteria'));
+            });
 
-            newElement.setAttribute('id', elementId);
-            newElement.setAttribute('class', elementTag);
+            $('.btn-remove-criteria').click(function() {
+                $(this).closest('.card').find('.select2').not(':first').last().remove();
+                $(this).closest('.card').find('.criteria').not(':first').last().remove();
 
-            newElement.innerHTML = html;
-            element.appendChild(newElement);
-        };
-
-        const removeElement = (elementId) => {
-            var element = document.getElementById(elementId);
-            element.parentNode.removeChild(element);
-        };
+                btnRemove($('.criteria'), $('.btn-remove-criteria'));
+            });
+        });
     </script>
 @endpush
 
