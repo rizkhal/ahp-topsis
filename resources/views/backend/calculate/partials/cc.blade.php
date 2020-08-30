@@ -13,7 +13,7 @@
         </div>
         <div class="card-body">
             <div class="form-group criteria-container">
-                <select name="criteria[]" class="criteria form-control"></select>
+                <select name="candidate[]" class="criteria form-control"></select>
             </div>
         </div>
     </div>

@@ -26,9 +26,8 @@ class CalculateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student'     => ['required', 'string'],
             'notes'       => ['required', 'string'],
-            'criteria'    => ['required', 'array'],
+            'candidate'   => ['required', 'array'],
             'alternative' => ['required', 'array'],
             'ahp'         => ['required', 'array'],
             'topsis'      => ['required', 'array'],
@@ -38,8 +37,7 @@ class CalculateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'student.required'     => 'Siswa tidak boleh kosong',
-            'criteria.required'    => 'Kriteria tidak boleh kosong',
+            'candidate.required'   => 'Kriteria tidak boleh kosong',
             'alternative.required' => 'Data alternative tidak boleh kosong',
         ];
     }
@@ -47,9 +45,8 @@ class CalculateRequest extends FormRequest
     public function data(): array
     {
         return [
-            'student'     => $this->student,
             'notes'       => $this->notes,
-            'criteria'    => $this->criteria,
+            'candidate'   => $this->candidate,
             'alternative' => $this->alternative,
             'ahp'         => $this->ahp,
             'topsis'      => $this->topsis,

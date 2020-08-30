@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Foundation\Auth\User;
 
@@ -13,8 +12,6 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-
         User::create([
             "name"     => "Admin",
             "username" => "admin",
