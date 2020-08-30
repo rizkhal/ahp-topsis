@@ -16,7 +16,7 @@ const generateMatrix = () => {
     var tbody = '';
     var tr = `<th scope="col" class="text-center">#</th>`;
     var flag = false;
-    var element = document.querySelectorAll("input.criteria");
+    var element = document.querySelectorAll("select.criteria");
 
     if (element[0].value == "") {
         swal({
@@ -40,10 +40,12 @@ const generateMatrix = () => {
             }
         }
 
-        criterias.push(el.value);
+        var valText = el.options[el.selectedIndex].text;
+
+        criterias.push(valText);
 
         var td = '';
-        tr += `<th scope="col" class="text-center">${el.value}</th>`;
+        tr += `<th scope="col" class="text-center">${valText}</th>`;
         for (var j = 0; j < element.length; j++) {
             if (element[j].value != "" && element[i].value != "") {
                 td += '<td><input style="min-width:100px!important;" type="text" name="ahp[' + i + '][' + j + ']" class="form-control table-input" id="table-input-' + i + '-' + j + '" data-i="' + i + '" data-j="' + j + '" value="' + (i == j ? '1' : '') + '" ' + (i == j ? 'readonly ' : 'onKeyUp="return checkInputMatrix(this);"') + 'required /></td>';
@@ -52,11 +54,12 @@ const generateMatrix = () => {
 
         tbody += `
           <tr>
-            <th scope="row" class="black white-text text-center">${el.value}</th>
+            <th scope="row" class="black white-text text-center">${valText}</th>
             ${td}
           </tr>`;
 
     });
+
     if (!flag) {
         document.getElementById("table-matrix-interest-top").innerHTML = tr;
         document.getElementById("table-matrix-interest-bottom").innerHTML = tbody;
@@ -142,22 +145,21 @@ const checkPairWiseMatrix = (trig, c) => {
 const generateMatrixPairWise = () => {
     $('#pairwise-body').html('');
 
-    candidates = [];
+    candidates  = [];
+    var flag    = false;
+    var element = document.querySelectorAll("select.alternative");
 
-    var flag = false;
-    var input = $("input.alternative");
-
-    if (input.val() == "") {
+    if (element[0].value == "") {
         swal({
             title: "Oops...",
             icon: "error",
-            text: "Candidate tidak boleh kosong.",
+            text: "Criteria tidak boleh kosong.",
         });
         return false;
     }
 
-    $.each(input, function (i, element) { 
-        var candidate = $(element).val();
+    element.forEach((el, i) => {
+        var candidate = el.options[el.selectedIndex].text;
 
         if(candidates.includes(candidate)){
             flag = true;
@@ -184,10 +186,12 @@ const generateMatrixPairWise = () => {
     }
 };
 
+// this method for print quantitative matrix
 const printQuantitativeMatrix = (criteria_name, c) => {
     var size = candidates.length;
     var tbody = '';
     var i =0;
+
     candidates.forEach(element => {
         tbody += `
             <tr>
@@ -197,6 +201,7 @@ const printQuantitativeMatrix = (criteria_name, c) => {
         `;
         i++;
     });
+
     var html = (c+1) + `. Data Alternative untuk Criteria : <strong>`+criteria_name+`</strong>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
@@ -212,6 +217,7 @@ const printQuantitativeMatrix = (criteria_name, c) => {
                     </table>
                 </div>
                 `;
+
     $('#pairwise-body').append(html);
 };
 

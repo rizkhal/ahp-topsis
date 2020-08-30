@@ -70,6 +70,7 @@ class CalculateController extends Controller
 
     public function store(CalculateRequest $request, Calculate $model)
     {
+        dd($request->data());
         if ($model->calculate($request->data())) {
             notice('success', 'Data criteria dan alternative berhasil dihitung.');
             return redirect()->route('admin.calculate.index');
