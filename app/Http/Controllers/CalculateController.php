@@ -56,11 +56,21 @@ class CalculateController extends Controller
         ], 200);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(CalculateDataTable $dataTable, Student $student)
     {
         return $dataTable->render('backend::calculate.index');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create(Student $student): View
     {
         return view('backend::calculate.create', [
@@ -68,9 +78,14 @@ class CalculateController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(CalculateRequest $request, Calculate $model)
     {
-        dd($request->data());
         if ($model->calculate($request->data())) {
             notice('success', 'Data criteria dan alternative berhasil dihitung.');
             return redirect()->route('admin.calculate.index');
