@@ -47,7 +47,6 @@ class Calculate extends Model
 
         $merge  = array_merge(['eigen' => $eigen], $topsis);
         $result = [
-            'student_id' => $data['student'],
             'data'       => json_encode($merge),
         ];
 
