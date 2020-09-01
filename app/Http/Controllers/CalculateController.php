@@ -25,7 +25,7 @@ class CalculateController extends Controller
         $data     = [];
 
         foreach ($students as $i => $row) {
-            $data[$row->id]['id']   = $row->id;
+            $data[$row->id]['id']   = $row->name;
             $data[$row->id]['text'] = $row->name;
         }
 
@@ -47,7 +47,7 @@ class CalculateController extends Controller
         $data         = [];
 
         foreach ($alternatives as $i => $row) {
-            $data[$row->id]['id']   = $row->id;
+            $data[$row->id]['id']   = $row->name;
             $data[$row->id]['text'] = $row->name;
         }
 
@@ -93,5 +93,18 @@ class CalculateController extends Controller
 
         notice('success', 'Data criteria dan alternative berhasil dihitung.');
         return redirect()->back();
+    }
+
+    /**
+     * Show the detail of the calculated matrix
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Calculate $model, $id)
+    {
+        return view('backend::calculate.show', [
+            'data' => $model->show($id),
+        ]);
     }
 }

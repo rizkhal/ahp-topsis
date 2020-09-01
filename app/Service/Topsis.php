@@ -153,14 +153,4 @@ class Topsis extends AhpTopsisBase
             'result'    => $this->result,
         ];
     }
-
-    /**
-     * Calculate the rank
-     *
-     * @return array
-     */
-    public function getRank(): array
-    {
-        return [];
-    }
 }

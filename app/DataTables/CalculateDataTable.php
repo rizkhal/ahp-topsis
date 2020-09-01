@@ -27,7 +27,26 @@ class CalculateDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->addColumn('action', 'calculatedatatable.action');
+            ->editColumn('created_at', function($model) {
+                return date('d F Y', strtotime($model->created_at));
+            })
+            ->addColumn('candidate', function($model) {
+                return 'aa';
+            })
+            ->addColumn('action', function ($model) {
+                return '
+                    <a href="'.route('admin.calculate.show', $model->id).'" class="btn btn-sm btn-info">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                    <a href="'.route('admin.calculate.edit', $model->id).'" class="btn btn-sm btn-warning">
+                        <i class="fa fa-pencil-alt"></i>
+                    </a>
+                    <button class="btn btn-sm btn-danger btn-destroy" data-url="'.route('admin.calculate.destroy', $model->id).'">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                ';
+            })
+            ->rawColumns(['action']);
     }
 
     /**
@@ -74,7 +93,10 @@ class CalculateDataTable extends DataTable
                 ->orderable(false)
                 ->searchable(false)
                 ->footer(''),
-            Column::make('id'),
+            Column::computed('candidate', 'Candidate'),
+            Column::make('created_at')
+                ->title('Tanggal')
+                ->width(100),
             Column::computed('action', 'Aksi')
                 ->exportable(false)
                 ->printable(false)

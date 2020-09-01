@@ -26,6 +26,9 @@ class AlternativeDataTable extends DataTable
         return datatables()
             ->eloquent($this->query)
             ->addIndexColumn()
+            ->editColumn('created_at', function($model) {
+                return date('d F Y', strtotime($model->created_at));
+            })
             ->editColumn('description', function($model) {
                 if (is_null($model->description)) {
                     return '<span class="badge badge-info">Kosong</span>';
@@ -71,7 +74,7 @@ class AlternativeDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('lfrtip')
-            ->orderBy(1);
+            ->orderBy(3, 'desc');
     }
 
     /**
@@ -91,12 +94,18 @@ class AlternativeDataTable extends DataTable
                 ->orderable(false)
                 ->searchable(false)
                 ->footer(''),
-            Column::make('name')->title('Nama'),
-            Column::make('description')->title('Deskripsi'),
+            Column::make('name')
+                ->title('Nama'),
+            Column::make('description')
+                ->title('Deskripsi'),
+            Column::make('created_at')
+                ->title('Tanggal')
+                ->width(100),
             Column::computed('action', 'Aksi')
                 ->exportable(false)
                 ->printable(false)
-                ->addClass('text-center'),
+                ->addClass('text-center')
+                ->width(100),
         ];
     }
 

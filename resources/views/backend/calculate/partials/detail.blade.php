@@ -5,7 +5,7 @@
     <div class="card-body">
         <div class="form-group">
             <label>Catatan</label>
-            <textarea name="notes" class="@error('is-invalid') is-invalid @enderror form-control">{{ old("notes") }}</textarea>
+            <textarea name="notes" class="@error('is-invalid') is-invalid @enderror form-control">{{ old("notes", "This is for testing.") }}</textarea>
 
             @error('notes')
                 <span class="invalid-feedback">{{ $message }}</span>

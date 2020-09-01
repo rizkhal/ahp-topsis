@@ -26,7 +26,7 @@ class CalculateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'notes'       => ['required', 'string'],
+            'notes'       => ['nullable', 'string'],
             'candidate'   => ['required', 'array'],
             'alternative' => ['required', 'array'],
             'ahp'         => ['required', 'array'],

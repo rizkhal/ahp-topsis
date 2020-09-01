@@ -8,52 +8,72 @@ use Illuminate\Database\Eloquent\Model;
 
 class Calculate extends Model
 {
-    protected $fillable = ['data'];
+    protected $guarded = [];
 
     protected $casts = [
         'data' => 'json',
     ];
 
-    protected $ahp;
-
-    protected $topsis;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->ahp    = new Ahp;
-        $this->topsis = new Topsis;
-    }
-
+    /**
+     * Calculate the matrix
+     *
+     * @param  array  $data
+     * @return bool
+     */
     public function calculate(array $data): bool
     {
-        foreach ($data['criteria'] as $i => $c) {
-            $criteria[] = [
+        $ahp    = new Ahp;
+        $topsis = new Topsis;
+
+        foreach ($data['candidate'] as $i => $c) {
+            $candidate[] = [
                 'name' => $c,
                 'type' => true,
             ];
         }
 
-        $eigen  = $this->ahp->setCriteria($criteria)->setMatrix($data['ahp'])->getEigen();
-        $topsis = $this->topsis->normalize($data['topsis'])->calculate($eigenVector)->getResult();
+        $eigenVector = $ahp->setCriteria($candidate)->setMatrix($data['ahp'])->getEigen();
+        $topsis      = $topsis->normalize($data['topsis'])->calculate($eigenVector)->getResult();
 
-        foreach ($criteria as $i => $value) {
+        foreach ($candidate as $i => $value) {
             $eigen[] = [
-                'criteria'    => $value['name'],
+                'candidate'   => $value['name'],
                 'eigenVector' => $eigenVector[$i],
             ];
         }
 
-        $merge  = array_merge(['eigen' => $eigen], $topsis);
-        $result = [
-            'data'       => json_encode($merge),
-        ];
+        $result = array_merge(
+            ['eigen' => $eigen], $topsis,
+            ['candidate' => $data['candidate']],
+            ['alternative' => $data['alternative']]
+        );
 
-        if (self::create($result)) {
+        if (self::create(['data' => json_encode($result)])) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Show the data calculated
+     *
+     * @param  int    $id
+     * @return array
+     */
+    public function show(int $id): array
+    {
+        $row  = self::findOrFail($id);
+        $data = json_decode($row['data']);
+
+        foreach ($data->result as $i => $v) {
+            $result[] = $v;
+        }
+
+        dd($result);
+
+        return [
+            'eigen' => $data['eigen'],
+        ];
     }
 }

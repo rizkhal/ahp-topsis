@@ -25,6 +25,9 @@ class StudentDataTable extends DataTable
             ->editColumn('gender', function($model) {
                 return Gender::label($model->gender);
             })
+            ->editColumn('created_at', function($model) {
+                return date('d F Y', strtotime($model->created_at));
+            })
             ->addColumn('action', function ($model) {
                 return '
                     <a href="'.route('admin.students.edit', $model->id).'" class="btn btn-sm btn-warning">
@@ -63,7 +66,7 @@ class StudentDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('lfrtip')
-            ->orderBy(1);
+            ->orderBy(5, 'desc');
     }
 
     /**
@@ -83,10 +86,17 @@ class StudentDataTable extends DataTable
                 ->orderable(false)
                 ->searchable(false)
                 ->footer(''),
-            Column::make('name')->title('Nama'),
-            Column::make('nis')->title('Nomor Induk'),
-            Column::make('gender')->title('Jenis Kelamin'),
-            Column::make('address')->title('Alamat'),
+            Column::make('name')
+                ->title('Nama'),
+            Column::make('nis')
+                ->title('Nomor Induk'),
+            Column::make('gender')
+                ->title('Jenis Kelamin'),
+            Column::make('address')
+                ->title('Alamat'),
+            Column::make('created_at')
+                ->title('Tanggal')
+                ->width(100),
             Column::computed('action', 'Aksi')
                 ->exportable(false)
                 ->printable(false)
