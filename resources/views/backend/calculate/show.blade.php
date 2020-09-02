@@ -164,7 +164,7 @@
                                             <th>Skor Akhir</th>
                                         </tr>
                                         @for ($i = 0; $i < count($ranks); $i++)
-                                            <tr>
+                                            <tr {{ $i == 0 ? "class=table-danger" : "" }}>
                                                 <td>{{$i + 1}}</td>
                                                 <td>{{$ranks[$i][0]}}</td>
                                                 <td>{{$ranks[$i][1]}}</td>
