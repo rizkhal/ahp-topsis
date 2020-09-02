@@ -63,17 +63,8 @@ class Calculate extends Model
      */
     public function show(int $id): array
     {
-        $row  = self::findOrFail($id);
-        $data = json_decode($row['data']);
-
-        foreach ($data->result as $i => $v) {
-            $result[] = $v;
-        }
-
-        dd($result);
-
         return [
-            'eigen' => $data['eigen'],
+            'data' => json_decode(self::findOrFail($id)['data']),
         ];
     }
 }

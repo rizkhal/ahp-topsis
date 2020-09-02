@@ -103,8 +103,28 @@ class CalculateController extends Controller
      */
     public function show(Calculate $model, $id)
     {
+        $data      = $model->show($id);
+        $result    = $data['data']->result;
+        $candidate = $data['data']->candidate;
+
+        $ranks = [];
+        foreach ($candidate as $i => $value) {
+            array_push($ranks, [$value, $result[$i]]);
+        }
+
+        array_multisort(array_map(function ($element) {
+            return $element[1];
+        }, $ranks), SORT_DESC, $ranks);
+
         return view('backend::calculate.show', [
-            'data' => $model->show($id),
+            'ranks'       => $ranks,
+            'result'      => $result,
+            'candidate'   => $candidate,
+            'eigen'       => $data['data']->eigen,
+            'solution'    => $data['data']->solution,
+            'distance'    => $data['data']->distance,
+            'normalize'   => $data['data']->normalize,
+            'alternative' => $data['data']->alternative,
         ]);
     }
 }
