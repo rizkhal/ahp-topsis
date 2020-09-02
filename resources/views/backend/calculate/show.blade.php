@@ -139,7 +139,7 @@
                                             <th>Skor Akhir</th>
                                         </tr>
                                         @foreach($candidate as $i => $value)
-                                            <tr>
+                                            <tr {{ max($result) == $result[$i] ? "class=table-danger" : "" }}>
                                                 <td>{{++$i}}.</td>
                                                 <td>{{$value}}</td>
                                                 <td>{{$result[$i-1]}}</td>
