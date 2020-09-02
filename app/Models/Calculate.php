@@ -43,9 +43,10 @@ class Calculate extends Model
         }
 
         $result = array_merge(
+            ['notes' => $data['notes']],
             ['eigen' => $eigen], $topsis,
             ['candidate' => $data['candidate']],
-            ['alternative' => $data['alternative']]
+            ['alternative' => $data['alternative']],
         );
 
         if (self::create(['data' => json_encode($result)])) {
@@ -66,5 +67,21 @@ class Calculate extends Model
         return [
             'data' => json_decode(self::findOrFail($id)['data']),
         ];
+    }
+
+    /**
+     * Delete the calculated matrix row
+     *
+     * @param  string $id
+     * @return bool
+     */
+    public function remove(string $id): bool
+    {
+        $student = self::findOrFail($id);
+        if ($student->delete($id)) {
+            return true;
+        }
+
+        return false;
     }
 }

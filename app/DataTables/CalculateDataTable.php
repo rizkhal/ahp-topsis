@@ -17,6 +17,25 @@ class CalculateDataTable extends DataTable
     private $query;
 
     /**
+     * Calculate for get the high score from calculated matrix
+     * 
+     * @return array
+     */
+    private function calculate($data)
+    {
+        $ranks = [];
+        foreach ($data->candidate as $i => $value) {
+            array_push($ranks, [$value, $data->result[$i]]);
+        }
+
+        array_multisort(array_map(function ($element) {
+            return $element[1];
+        }, $ranks), SORT_DESC, $ranks);
+
+        return $ranks[0];
+    }
+
+    /**
      * Build DataTable class.
      *
      * @param mixed $query Results from query() method.
@@ -31,15 +50,21 @@ class CalculateDataTable extends DataTable
                 return date('d F Y', strtotime($model->created_at));
             })
             ->addColumn('candidate', function($model) {
-                return 'aa';
+                $rank = $this->calculate(json_decode($model->data));
+                return $rank[0];
+            })
+            ->addColumn('score', function($model) {
+                $rank = $this->calculate(json_decode($model->data));
+                return $rank[1];
+            })
+            ->addColumn('notes', function($model) {
+                $row = json_decode($model->data);
+                return $row->notes;
             })
             ->addColumn('action', function ($model) {
                 return '
                     <a href="'.route('admin.calculate.show', $model->id).'" class="btn btn-sm btn-info">
                         <i class="fa fa-eye"></i>
-                    </a>
-                    <a href="'.route('admin.calculate.edit', $model->id).'" class="btn btn-sm btn-warning">
-                        <i class="fa fa-pencil-alt"></i>
                     </a>
                     <button class="btn btn-sm btn-danger btn-destroy" data-url="'.route('admin.calculate.destroy', $model->id).'">
                         <i class="fa fa-trash"></i>
@@ -69,11 +94,12 @@ class CalculateDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('calculatedatatable-table')
+            ->setTableId('calculate-table')
+            ->addTableClass('table table-hover table-striped')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
-            ->orderBy(1);
+            ->orderBy(4, 'desc');
     }
 
     /**
@@ -94,6 +120,8 @@ class CalculateDataTable extends DataTable
                 ->searchable(false)
                 ->footer(''),
             Column::computed('candidate', 'Candidate'),
+            Column::computed('score', 'Skor Akhir'),
+            Column::computed('notes', 'Catatan'),
             Column::make('created_at')
                 ->title('Tanggal')
                 ->width(100),

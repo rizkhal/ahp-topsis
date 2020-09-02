@@ -103,9 +103,9 @@ class CalculateController extends Controller
      */
     public function show(Calculate $model, $id)
     {
-        $data      = $model->show($id);
-        $result    = $data['data']->result;
-        $candidate = $data['data']->candidate;
+        $data      = $model->show($id)['data'];
+        $result    = $data->result;
+        $candidate = $data->candidate;
 
         $ranks = [];
         foreach ($candidate as $i => $value) {
@@ -120,11 +120,33 @@ class CalculateController extends Controller
             'ranks'       => $ranks,
             'result'      => $result,
             'candidate'   => $candidate,
-            'eigen'       => $data['data']->eigen,
-            'solution'    => $data['data']->solution,
-            'distance'    => $data['data']->distance,
-            'normalize'   => $data['data']->normalize,
-            'alternative' => $data['data']->alternative,
+            'eigen'       => $data->eigen,
+            'notes'       => $data->notes,
+            'solution'    => $data->solution,
+            'distance'    => $data->distance,
+            'normalize'   => $data->normalize,
+            'alternative' => $data->alternative,
         ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Calculate $model, $id)
+    {
+        if ($model->remove($id)) {
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Berhasil menghapus data',
+            ], 200);
+        }
+
+        return response()->json([
+            'status'  => 'failed',
+            'message' => 'Terjadi kesalahan',
+        ], 500);
     }
 }

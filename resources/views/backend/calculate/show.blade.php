@@ -5,7 +5,7 @@
             <x-breadcrumb title="Calculated Matrix"></x-breadcrumb>
             <div class="section-body">
                 <h2 class="section-title">Daftar tabel</h2>
-                <p class="section-lead">Data yang ditampilkan merupakan hasil perhitungan.</p>
+                <p class="section-lead">{{$notes}}</p>
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="card">
