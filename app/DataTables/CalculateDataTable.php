@@ -58,8 +58,7 @@ class CalculateDataTable extends DataTable
                 return $rank[1];
             })
             ->addColumn('notes', function($model) {
-                $row = json_decode($model->data);
-                return $row->notes;
+                return json_decode($model->data)->notes;
             })
             ->addColumn('action', function ($model) {
                 return '

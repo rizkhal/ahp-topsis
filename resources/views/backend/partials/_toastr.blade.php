@@ -5,6 +5,7 @@
 @if (session()->has('notice'))
     @php
         $values = session()->get('notice');
+        dd($values);
     @endphp
     @if (is_array($values))
         <script type="text/javascript">

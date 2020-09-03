@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Alternative;
+use App\Models\Calculate;
+use App\Models\Student;
 
 class HomeController extends Controller
 {
@@ -21,8 +23,12 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Alternative $alternative, Calculate $calculate, Student $student)
     {
-        return view('home');
+        return view('backend::dashboard.index', [
+            'student'     => $student->count(),
+            'calculate'   => $calculate->count(),
+            'alternative' => $alternative->count(),
+        ]);
     }
 }

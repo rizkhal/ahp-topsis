@@ -20,5 +20,21 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function notif(type, message) {
+        if (type == 'success') {
+            iziToast.success({
+                message: message,
+                position: 'topRight'
+            });
+        }
+
+        if (type == 'error') {
+            iziToast.error({
+                message: message,
+                position: 'topRight'
+            });
+        }
+    }
 </script>
 @stack('scripts')

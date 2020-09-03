@@ -34,11 +34,15 @@
                                     '_method': 'DELETE'
                                 }
                             }).done(function(response) {
+                                }).done(function(response) {
                                 $('.table').DataTable().ajax.reload();
+                                notif(response.type, response.message);
+                            }).fail(function(error) {
+                                notif(response.type, response.message);
                             });
                         } else {
                             iziToast.info({
-                                message: 'Data siswa tidak dihapus',
+                                message: 'Maaf, terjadi kesalahan.',
                                 position: 'topRight'
                             });
                         }

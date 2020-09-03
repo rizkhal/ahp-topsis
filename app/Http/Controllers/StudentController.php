@@ -91,13 +91,13 @@ class StudentController extends Controller
     {
         if ($model->remove($id)) {
             return response()->json([
-                'status'  => 'success',
+                'type'    => 'success',
                 'message' => 'Berhasil menghapus data',
             ], 200);
         }
 
         return response()->json([
-            'status'  => 'failed',
+            'type'    => 'error',
             'message' => 'Terjadi kesalahan',
         ], 500);
     }
